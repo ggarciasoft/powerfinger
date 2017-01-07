@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: ee95fe7f2a2170046aedf53d1486f61b
+timeCreated: 1481598107
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Jet Set
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: e838ee225d6268748bdd1dea166bd701, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
