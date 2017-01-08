@@ -37,4 +37,23 @@ public static class Utilities
         }
     }
 
+    public static void Hide(this GameObject obj)
+    {
+        obj.transform.localScale = new Vector3(0,0,0);
+    }
+
+    public static void Hide(this string ctrlName)
+    {
+        GameObject.Find(ctrlName).Hide();
+    }
+
+    public static void Show(this GameObject obj)
+    {
+        obj.transform.localScale = new Vector3(1,1,1);
+    }
+
+    public static void Show(this string ctrlName)
+    {
+        GameObject.Find(ctrlName).Show();
+    }
 }

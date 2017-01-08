@@ -73,7 +73,7 @@ public class ManagerButtonsEvent : CommonManager
 
     public void ClickSaveSettings()
     {
-        var nickname = GameObject.Find("txtNickname").GetComponent<Text>();
+        var nickname = GameObject.Find("txtNickname").GetComponent<InputField>();
         var music = GameObject.Find("sldMusic").GetComponent<Slider>();
         var sound = GameObject.Find("sldSound").GetComponent<Slider>();
         if (String.IsNullOrEmpty(nickname.text))
@@ -89,5 +89,20 @@ public class ManagerButtonsEvent : CommonManager
         AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
         jo.Call("makeToast", "Settings saved successfully!");
 #endif
+    }
+
+    public void ClickMainMenuSettings()
+    {
+        GameObject.Find("txtNickname").GetComponent<InputField>().text = Preferences.Nickname;
+        GameObject.Find("sldMusic").GetComponent<Slider>().value = Preferences.MusicVolume;
+        GameObject.Find("sldSound").GetComponent<Slider>().value = Preferences.SoundVolume;
+        "pnlMainMenu".Hide();
+        "pnlSettings".Show();
+    }
+
+    public void ClickMainMenuCancelSettings()
+    {
+        "pnlSettings".Hide();
+        "pnlMainMenu".Show();
     }
 }

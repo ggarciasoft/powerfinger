@@ -12,6 +12,7 @@ public class MainMenuManager : CommonManager
     private List<GameObject> _lstInstatiatePoints;
     private float _camHalfHeight, _camHalfWidth;
     private Text _txtBlockImageText, _txtRegionName, _txtServerStatus;
+    private InputField _txtNickname;
     private Text txtBlockImageText
     {
         get
@@ -54,20 +55,38 @@ public class MainMenuManager : CommonManager
             _txtServerStatus = value;
         }
     }
+    private InputField txtNickname
+    {
+        get
+        {
+            if (_txtNickname == null)
+                _txtNickname = GameObject.Find("txtNickname").GetComponent<InputField>();
+            return _txtNickname;
+        }
+
+        set
+        {
+            _txtNickname = value;
+        }
+    }
+
     #endregion
 
     private void Start()
     {
+        "pnlSettings".Hide();
         UpdateServerService = true;
 
         _camHalfHeight = Camera.main.orthographicSize;
         _camHalfWidth = Camera.main.aspect * _camHalfHeight;
 
         _lstInstatiatePoints = new List<GameObject>();
-        /*
+
+        txtNickname.text = Preferences.Nickname;
+
         InvokeRepeating("ShowTextBlockImage", 0, 0.01f);
 
-        InitialiseServer();*/
+        InitialiseServer();
     }
 
     private void ShowTextBlockImage()
