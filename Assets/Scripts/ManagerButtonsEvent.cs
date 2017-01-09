@@ -93,16 +93,23 @@ public class ManagerButtonsEvent : CommonManager
 
     public void ClickMainMenuSettings()
     {
-        GameObject.Find("txtNickname").GetComponent<InputField>().text = Preferences.Nickname;
+        MessageBox("Alert");
+        /*GameObject.Find("txtNickname").GetComponent<InputField>().text = Preferences.Nickname;
         GameObject.Find("sldMusic").GetComponent<Slider>().value = Preferences.MusicVolume;
         GameObject.Find("sldSound").GetComponent<Slider>().value = Preferences.SoundVolume;
         "pnlMainMenu".Hide();
-        "pnlSettings".Show();
+        "pnlSettings".Show();*/
     }
 
     public void ClickMainMenuCancelSettings()
     {
         "pnlSettings".Hide();
         "pnlMainMenu".Show();
+    }
+
+    public void ClickMessageBoxOk()
+    {
+        var pnlMessageBox = GameObject.Find("pnlMessageBox");
+        Destroy(pnlMessageBox);
     }
 }
