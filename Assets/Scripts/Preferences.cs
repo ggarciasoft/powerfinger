@@ -24,11 +24,11 @@ namespace Assets.Scripts
         {
             get
             {
-                return PlayerPrefs.GetFloat("MusicVolume");
+                return PlayerPrefs.GetFloat("MusicVolume", 1);
             }
             set
             {
-                PlayerPrefs.GetFloat("MusicVolume", value);
+                PlayerPrefs.SetFloat("MusicVolume", value);
             }
         }
 
@@ -36,11 +36,11 @@ namespace Assets.Scripts
         {
             get
             {
-                return PlayerPrefs.GetFloat("SoundVolume");
+                return PlayerPrefs.GetFloat("SoundVolume", 1);
             }
             set
             {
-                PlayerPrefs.GetFloat("SoundVolume", value);
+                PlayerPrefs.SetFloat("SoundVolume", value);
             }
         }
     }

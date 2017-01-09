@@ -8,6 +8,7 @@ using ExitGames.Client.Photon.LoadBalancing;
 
 public class ManagerButtonsEvent : CommonManager
 {
+    #region Methods
     public void ExitApp()
     {
 #if UNITY_EDITOR
@@ -21,6 +22,14 @@ public class ManagerButtonsEvent : CommonManager
     {
         SceneManager.LoadScene(index);
     }
+
+    public void ClickMessageBoxOk()
+    {
+        var pnlMessageBox = GameObject.Find("pnlMessageBox");
+        Destroy(pnlMessageBox);
+    }
+
+    #region Main Menu Buttons
 
     public void ClickCreateGame()
     {
@@ -83,22 +92,16 @@ public class ManagerButtonsEvent : CommonManager
         Preferences.Nickname = nickname.text;
         Preferences.MusicVolume = music.value;
         Preferences.SoundVolume = sound.value;
-
-#if UNITY_ANDROID
-        AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-        jo.Call("makeToast", "Settings saved successfully!");
-#endif
+        MessageBox("Settings saved successfully!");
     }
 
     public void ClickMainMenuSettings()
     {
-        MessageBox("Alert");
-        /*GameObject.Find("txtNickname").GetComponent<InputField>().text = Preferences.Nickname;
+        GameObject.Find("txtNickname").GetComponent<InputField>().text = Preferences.Nickname;
         GameObject.Find("sldMusic").GetComponent<Slider>().value = Preferences.MusicVolume;
         GameObject.Find("sldSound").GetComponent<Slider>().value = Preferences.SoundVolume;
         "pnlMainMenu".Hide();
-        "pnlSettings".Show();*/
+        "pnlSettings".Show();
     }
 
     public void ClickMainMenuCancelSettings()
@@ -106,10 +109,7 @@ public class ManagerButtonsEvent : CommonManager
         "pnlSettings".Hide();
         "pnlMainMenu".Show();
     }
+    #endregion
 
-    public void ClickMessageBoxOk()
-    {
-        var pnlMessageBox = GameObject.Find("pnlMessageBox");
-        Destroy(pnlMessageBox);
-    }
+    #endregion
 }
