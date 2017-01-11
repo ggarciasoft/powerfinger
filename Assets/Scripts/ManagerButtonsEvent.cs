@@ -33,29 +33,8 @@ public class ManagerButtonsEvent : CommonManager
 
     public void ClickCreateGame()
     {
-        IsFirstPlayer = true;
-        var join = Client.OpCreateRoom("Room1", new RoomOptions
-        {
-            MaxPlayers = 2,
-            EmptyRoomTtl = 2000,
-            PlayerTtl = 2000,
-            CheckUserOnJoin = true
-        }, TypedLobby.Default);
-
-        if (!join) return;
-
-        foreach (var item in GameObject.FindGameObjectsWithTag("FadeWhite"))
-        {
-            var btn = item.GetComponent<Button>();
-            btn.interactable = false;
-        }
-
-        ActionWhenBlockImageToggle = () =>
-        {
-            SceneManager.LoadScene("PlayboardOnlineVersus");
-        };
-
-        InvokeRepeating("ShowBlockImage", 0, 0.01f);
+        "pnlMainMenu".Hide();
+        "pnlCreateGame".Show();
     }
 
     public void ClickJoinGame()
@@ -80,6 +59,18 @@ public class ManagerButtonsEvent : CommonManager
         InvokeRepeating("ShowBlockImage", 0, 0.01f);
     }
 
+    public void ClickMainMenuSettings()
+    {
+        GameObject.Find("txtNickname").GetComponent<InputField>().text = Preferences.Nickname;
+        GameObject.Find("sldMusic").GetComponent<Slider>().value = Preferences.MusicVolume;
+        GameObject.Find("sldSound").GetComponent<Slider>().value = Preferences.SoundVolume;
+        "pnlMainMenu".Hide();
+        "pnlSettings".Show();
+    }
+    #endregion
+
+    #region Settings
+
     public void ClickSaveSettings()
     {
         var nickname = GameObject.Find("txtNickname").GetComponent<InputField>();
@@ -95,20 +86,53 @@ public class ManagerButtonsEvent : CommonManager
         MessageBox("Settings saved successfully!");
     }
 
-    public void ClickMainMenuSettings()
-    {
-        GameObject.Find("txtNickname").GetComponent<InputField>().text = Preferences.Nickname;
-        GameObject.Find("sldMusic").GetComponent<Slider>().value = Preferences.MusicVolume;
-        GameObject.Find("sldSound").GetComponent<Slider>().value = Preferences.SoundVolume;
-        "pnlMainMenu".Hide();
-        "pnlSettings".Show();
-    }
-
-    public void ClickMainMenuCancelSettings()
+    public void ClickMainMenuBackSettings()
     {
         "pnlSettings".Hide();
         "pnlMainMenu".Show();
     }
+    #endregion
+
+    #region Create Game
+
+    public void ClickMainMenuBackCreateGame()
+    {
+        "pnlCreateGame".Hide();
+        "pnlMainMenu".Show();
+    }
+
+    public void sldTimeChanged(float value)
+    {
+        GameObject.Find("txtTime").GetComponent<Text>().text = value.ToString();
+    }
+
+    public void ClickCreate()
+    {
+        IsFirstPlayer = true;
+        var join = Client.OpCreateRoom(null, new RoomOptions
+        {
+            MaxPlayers = 2,
+            EmptyRoomTtl = 2000,
+            PlayerTtl = 2000,
+            CheckUserOnJoin = true
+        }, TypedLobby.Default);
+
+        if (!join) return;
+
+        foreach (var item in GameObject.FindGameObjectsWithTag("FadeWhite"))
+        {
+            var btn = item.GetComponent<Button>();
+            btn.interactable = false;
+        }
+
+        ActionWhenBlockImageToggle = () =>
+        {
+            SceneManager.LoadScene("PlayboardOnlineVersus");
+        };
+
+        InvokeRepeating("ShowBlockImage", 0, 0.01f);
+    }
+
     #endregion
 
     #endregion

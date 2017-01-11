@@ -16,8 +16,9 @@ public class PlayboardOnlineVersusManager : CommonManager
     private Dictionary<GamePoint.GamePointType, GameObject> _listGamePointsType;
     private List<GamePoint> _listGamePointsGenerated;
     private GameObject _playboard;
-    private Text _txtTimer, _txtScoreP1, _txtScoreP2, _txtNameP1, _txtNameP2;
+    private Text _txtTimer, _txtScoreP1, _txtScoreP2, _txtNameP1, _txtNameP2, _lblWaitingForPlayer;
     private float _timerCount = 30f;
+    private bool _gameInitiate;
     private short _currentSelfScore, _currentOtherScore;
 
     private GameObject Playboard
@@ -98,6 +99,19 @@ public class PlayboardOnlineVersusManager : CommonManager
             _txtNameP2 = value;
         }
     }
+    private Text LblWaitingForPlayer
+    {
+        get
+        {
+            if (_lblWaitingForPlayer == null)
+                _lblWaitingForPlayer = GameObject.Find("lblWaitingForPlayer").GetComponent<Text>();
+            return _lblWaitingForPlayer;
+        }
+        set
+        {
+            _lblWaitingForPlayer = value;
+        }
+    }
     #endregion
 
     #region Methods
@@ -106,6 +120,7 @@ public class PlayboardOnlineVersusManager : CommonManager
         UpdateServerService = true;
         Client.OnRoomFullAction += () =>
         {
+            _gameInitiate = true;
             TxtNameP1.text = Client.CurrentRoom.Players.First().Value.NickName;
             TxtNameP2.text = Client.CurrentRoom.Players.Last().Value.NickName;
             InvokeRepeating("HideBlockImage", 0, 0.01f);
@@ -154,6 +169,8 @@ public class PlayboardOnlineVersusManager : CommonManager
             BlockImageSetActive(true);
             InvokeRepeating("CountDownInit", 2.0f, 1.0f);
         };
+
+        InvokeRepeating("ShowWaitingForPlayer", 0, 0.01f);
     }
 
     private void Initialise()
@@ -166,6 +183,29 @@ public class PlayboardOnlineVersusManager : CommonManager
         TxtNameP2 = GameObject.Find("txtNameP2").GetComponent<Text>();
         _listGamePointsType = new Dictionary<GamePoint.GamePointType, GameObject>();
         _listGamePointsGenerated = new List<GamePoint>();
+    }
+
+    private void ShowWaitingForPlayer()
+    {
+        if (LblWaitingForPlayer.color.a >= 1)
+        {
+            CancelInvoke("ShowWaitingForPlayer");
+            InvokeRepeating("HideWaitingForPlayer", 0, 0.01f);
+            return;
+        }
+        LblWaitingForPlayer.color = new Color(0, 0, 0, LblWaitingForPlayer.color.a + 0.01f);
+    }
+
+    private void HideWaitingForPlayer()
+    {
+        if (LblWaitingForPlayer.color.a <= 0)
+        {
+            CancelInvoke("HideWaitingForPlayer");
+            if (!_gameInitiate)
+                InvokeRepeating("ShowWaitingForPlayer", 0, 0.01f);
+            return;
+        }
+        LblWaitingForPlayer.color = new Color(0, 0, 0, LblWaitingForPlayer.color.a - 0.01f);
     }
 
     private void CountDownInit()

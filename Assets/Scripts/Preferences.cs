@@ -12,11 +12,21 @@ namespace Assets.Scripts
         {
             get
             {
-                return PlayerPrefs.GetString("Nickname");
+                var nickName = PlayerPrefs.GetString("Nickname");
+                if (String.IsNullOrEmpty(nickName))
+                {
+                    nickName = "Guess" + Guid.NewGuid().ToString().Replace('-', ' ').Substring(0, 13);
+                    PlayerPrefs.SetString("Nickname", nickName);
+                }
+                return nickName;
             }
             set
             {
-                PlayerPrefs.SetString("Nickname", value);
+                var nickName = value;
+                if (String.IsNullOrEmpty(nickName))
+                    nickName = "Guess" + Guid.NewGuid().ToString().Replace('-', ' ').Substring(0, 13);
+
+                PlayerPrefs.SetString("Nickname", nickName);
             }
         }
 

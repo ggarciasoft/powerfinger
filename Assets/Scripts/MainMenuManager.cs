@@ -75,6 +75,7 @@ public class MainMenuManager : CommonManager
     private void Start()
     {
         "pnlSettings".Hide();
+        "pnlCreateGame".Hide();
         UpdateServerService = true;
 
         _camHalfHeight = Camera.main.orthographicSize;
@@ -138,7 +139,7 @@ public class MainMenuManager : CommonManager
         Client.ConnectToRegionMaster(RegionName);
         txtRegionName.text = "REGION: " + RegionName.ToUpper();
     }
-    /*
+    
     private void Update()
     {
         GameObject.Find("btnJoinGame").GetComponent<Button>().interactable =
@@ -181,10 +182,6 @@ public class MainMenuManager : CommonManager
                 break;
         }
 
-        Client.NickName = txtPlayerName.text;
-
-        PlayerPrefs.SetString("PlayerName", txtPlayerName.text);
-
         Client.Service();
-    }*/
+    }
 }
