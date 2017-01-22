@@ -8,6 +8,28 @@ namespace Assets.Scripts
 {
     public class Preferences
     {
+        public static string RegionName
+        {
+            get
+            {
+                var regionName = PlayerPrefs.GetString("RegionName");
+                if (String.IsNullOrEmpty(regionName))
+                {
+                    regionName = "us";
+                    PlayerPrefs.SetString("RegionName", regionName);
+                }
+                return regionName;
+            }
+            set
+            {
+                var regionName = value;
+                if (String.IsNullOrEmpty(regionName))
+                    regionName = "us";
+
+                PlayerPrefs.SetString("RegionName", regionName);
+            }
+        }
+
         public static string Nickname
         {
             get

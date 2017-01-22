@@ -54,9 +54,10 @@ namespace Assets.Scripts
                 return PowerFingerBalancingClient.Instance;
             }
         }
-        protected bool IsFirstPlayer { get; set; }
         protected Action ActionWhenBlockImageToggle { get; set; }
+        protected static bool IsFirstPlayer { get; set; }
         protected static bool UpdateServerService { get; set; }
+        protected static bool BackFromGame { get; set; }
         #endregion
 
         #region Methods

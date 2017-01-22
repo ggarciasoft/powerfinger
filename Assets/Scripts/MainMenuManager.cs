@@ -11,13 +11,13 @@ public class MainMenuManager : CommonManager
     public GameObject[] lstAvailablePoints, btnPrincipalGameButton;
     private List<GameObject> _lstInstatiatePoints;
     private float _camHalfHeight, _camHalfWidth;
-    private Text _txtBlockImageText, _txtRegionName, _txtServerStatus;
+    private Text _txtBlockImageText, _txtServerStatus;
     private InputField _txtNickname;
     private Text txtBlockImageText
     {
         get
         {
-            if(_txtBlockImageText == null)
+            if (_txtBlockImageText == null)
                 _txtBlockImageText = GameObject.Find("txtBlockImage").GetComponent<Text>();
             return _txtBlockImageText;
         }
@@ -25,20 +25,6 @@ public class MainMenuManager : CommonManager
         set
         {
             _txtBlockImageText = value;
-        }
-    }
-    private Text txtRegionName
-    {
-        get
-        {
-            if (_txtRegionName == null)
-                _txtRegionName = GameObject.Find("txtRegionName").GetComponent<Text>();
-            return _txtRegionName;
-        }
-
-        set
-        {
-            _txtRegionName = value;
         }
     }
     private Text txtServerStatus
@@ -85,7 +71,13 @@ public class MainMenuManager : CommonManager
 
         txtNickname.text = Preferences.Nickname;
 
-        InvokeRepeating("ShowTextBlockImage", 0, 0.01f);
+        if (BackFromGame)
+        {
+            InvokeRepeating("HideBlockImageAndText", 0, 0.01f);
+            BackFromGame = false;
+        }
+        else
+            InvokeRepeating("ShowTextBlockImage", 0, 0.01f);
 
         InitialiseServer();
     }
@@ -113,7 +105,9 @@ public class MainMenuManager : CommonManager
             return;
         }
 
-        txtBlockImageText.color = new Color(0, 0, 0, txtBlockImageText.color.a - 0.01f);
+        if (txtBlockImageText.color.a > 0f)
+            txtBlockImageText.color = new Color(0, 0, 0, txtBlockImageText.color.a - 0.01f);
+
         BlockImage.color = new Color(255, 255, 255, BlockImage.color.a - 0.01f);
     }
 
@@ -136,10 +130,9 @@ public class MainMenuManager : CommonManager
 
     private void InitialiseServer()
     {
-        Client.ConnectToRegionMaster(RegionName);
-        txtRegionName.text = "REGION: " + RegionName.ToUpper();
+        Client.ConnectToRegionMaster(Preferences. RegionName);
     }
-    
+
     private void Update()
     {
         GameObject.Find("btnJoinGame").GetComponent<Button>().interactable =

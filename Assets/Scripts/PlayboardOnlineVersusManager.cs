@@ -7,6 +7,7 @@ using Assets.Scripts;
 using ExitGames.Client.Photon.LoadBalancing;
 using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.SceneManagement;
 
 public class PlayboardOnlineVersusManager : CommonManager
 {
@@ -278,11 +279,17 @@ public class PlayboardOnlineVersusManager : CommonManager
 
     private void Update()
     {
-        Client.Service();
+        if (!_gameInitiate && Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
+        {
+            Client.OpLeaveRoom();
+            BackFromGame = true;
+            SceneManager.LoadScene("MainMenu");
+        }
 
-        //Debug.Log("Current Status:" + Client.State.ToString());
+        if (UpdateServerService)
+            Client.Service();
 
-        if (Client.CurrentRoom == null) return;
+        if (!_gameInitiate) return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
