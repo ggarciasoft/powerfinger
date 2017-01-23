@@ -381,12 +381,13 @@
     <Compile Include="Assets\Scripts\CommonManager.cs" />
     <Compile Include="Assets\Scripts\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\ManagerButtonsEvent.cs" />
-    <Compile Include="Assets\Scripts\IOnlineService.cs" />
+    <Compile Include="Assets\Scripts\OnlineServices\IOnlineService.cs" />
+    <Compile Include="Assets\Scripts\OnlineServices\MainOnlineService.cs" />
     <Compile Include="Assets\Scripts\PlayboardLocalVersusManager.cs" />
     <Compile Include="Assets\Scripts\PlayboardOnlineVersusManager.cs" />
     <Compile Include="Assets\Scripts\PlayerJoinData.cs" />
     <Compile Include="Assets\Scripts\PointExplodeData.cs" />
-    <Compile Include="Assets\Scripts\PowerFingerBalancingClient.cs" />
+    <Compile Include="Assets\Scripts\OnlineServices\PowerFingerBalancingClient.cs" />
     <Compile Include="Assets\Scripts\Preferences.cs" />
     <Compile Include="Assets\Scripts\Utilities.cs" />
   </ItemGroup>

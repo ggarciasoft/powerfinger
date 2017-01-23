@@ -1,4 +1,5 @@
-﻿using ExitGames.Client.Photon.LoadBalancing;
+﻿using Assets.Scripts.OnlineServices;
+using ExitGames.Client.Photon.LoadBalancing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,13 +48,16 @@ namespace Assets.Scripts
                 _regionName = value;
             }
         }
-        protected PowerFingerBalancingClient Client
+
+
+        protected IOnlineService OnlineService
         {
             get
             {
-                return PowerFingerBalancingClient.Instance;
+                return MainOnlineService.OnlineService;
             }
         }
+
         protected Action ActionWhenBlockImageToggle { get; set; }
         protected static bool IsFirstPlayer { get; set; }
         protected static bool UpdateServerService { get; set; }
@@ -100,16 +104,5 @@ namespace Assets.Scripts
             GameObject.Find("lblMessage").GetComponent<Text>().text = message;
         }
         #endregion
-
-        public enum EventDataCode
-        {
-            PointExplode
-        }
-
-        public enum EventDataParameter
-        {
-            PointId,
-            SumScore
-        }
     }
 }

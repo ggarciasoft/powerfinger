@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
 using Assets.Scripts;
+using Assets.Scripts.OnlineServices;
 
 public class MainMenuManager : CommonManager
 {
@@ -79,7 +80,7 @@ public class MainMenuManager : CommonManager
         else
             InvokeRepeating("ShowTextBlockImage", 0, 0.01f);
 
-        InitialiseServer();
+        InitializeServer();
     }
 
     private void ShowTextBlockImage()
@@ -128,9 +129,9 @@ public class MainMenuManager : CommonManager
         _lstInstatiatePoints.Add(point);
     }
 
-    private void InitialiseServer()
+    private void InitializeServer()
     {
-        Client.ConnectToRegionMaster(Preferences. RegionName);
+        OnlineService.Initialize();
     }
 
     private void Update()
@@ -140,41 +141,14 @@ public class MainMenuManager : CommonManager
 
         if (!UpdateServerService) return;
 
-        switch (Client.State)
-        {
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.Uninitialized:
-                txtServerStatus.text = "UNINITIALIZED";
-                break;
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.ConnectingToGameserver:
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.ConnectedToGameserver:
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.Joining:
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.Joined:
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.ConnectingToMasterserver:
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.ConnectedToMaster:
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.ConnectedToNameServer:
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.ConnectingToNameServer:
-                txtServerStatus.text = "CONNECTING";
-                break;
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.JoinedLobby:
-                GameObject.Find("btnJoinGame").GetComponent<Button>().interactable =
-                GameObject.Find("btnCreateGame").GetComponent<Button>().interactable = true;
-                txtServerStatus.text = "CONNECTED";
-                break;
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.DisconnectingFromMasterserver:
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.Leaving:
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.DisconnectingFromGameserver:
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.Disconnecting:
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.DisconnectingFromNameServer:
-                txtServerStatus.text = "DISCONNECTING";
-                break;
-            case ExitGames.Client.Photon.LoadBalancing.ClientState.Disconnected:
-                txtServerStatus.text = "DISCONNECTED";
-                break;
-            default:
-                txtServerStatus.text = "UNKNOWN";
-                break;
-        }
+        var connectionStatus = OnlineService.GetConnectionStatus();
 
-        Client.Service();
+        txtServerStatus.text = connectionStatus.ToString();
+
+        if (connectionStatus == OnlineStatus.Connected)
+            GameObject.Find("btnJoinGame").GetComponent<Button>().interactable =
+            GameObject.Find("btnCreateGame").GetComponent<Button>().interactable = true;
+
+        OnlineService.Sync();
     }
 }

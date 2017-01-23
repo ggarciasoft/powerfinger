@@ -119,21 +119,12 @@ public class PlayboardOnlineVersusManager : CommonManager
     void Start()
     {
         UpdateServerService = true;
-        Client.OnRoomFullAction += () =>
-        {
-            _gameInitiate = true;
-            TxtNameP1.text = Client.CurrentRoom.Players.First().Value.NickName;
-            TxtNameP2.text = Client.CurrentRoom.Players.Last().Value.NickName;
-            InvokeRepeating("HideBlockImage", 0, 0.01f);
-        };
 
-        Client.OnPointExplodeAction += (pointExplode) =>
-        {
-            Debug.Log("Point Explode");
-            PointExplodeFromOponent(pointExplode.PointId, pointExplode.SumScore);
-        };
+        OnlineService.SetOnRoomFullEvent(OnRoomFull);
 
-        Initialise();
+        OnlineService.SetOnPointExplodeEvent(PointExplodeFromOponent);;
+
+        Initialize();
 
         SetTimer();
 
@@ -174,7 +165,15 @@ public class PlayboardOnlineVersusManager : CommonManager
         InvokeRepeating("ShowWaitingForPlayer", 0, 0.01f);
     }
 
-    private void Initialise()
+    private void OnRoomFull()
+    {
+        _gameInitiate = true;
+        TxtNameP1.text = OnlineService.CurrentRoom.Players.First().Value.NickName;
+        TxtNameP2.text = OnlineService.CurrentRoom.Players.Last().Value.NickName;
+        InvokeRepeating("HideBlockImage", 0, 0.01f);
+    }
+
+    private void Initialize()
     {
         Playboard = GameObject.Find("Playboard");
         TxtTimer = GameObject.Find("txtTimer").GetComponent<Text>();
@@ -281,13 +280,13 @@ public class PlayboardOnlineVersusManager : CommonManager
     {
         if (!_gameInitiate && Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
         {
-            Client.OpLeaveRoom();
+            OnlineService.LeaveRoom();
             BackFromGame = true;
             SceneManager.LoadScene("MainMenu");
         }
 
         if (UpdateServerService)
-            Client.Service();
+            OnlineService.Sync();
 
         if (!_gameInitiate) return;
 
@@ -320,11 +319,12 @@ public class PlayboardOnlineVersusManager : CommonManager
 
             _currentSelfScore += sumScore;
             var id = short.Parse(objectTouched.name.Split('-')[1]);
-            Hashtable evData = new Hashtable();
-            evData[(byte)EventDataParameter.PointId] = id;
-            evData[(byte)EventDataParameter.SumScore] = sumScore;
 
-            Client.OpRaiseEvent((byte)EventDataCode.PointExplode, evData, true, RaiseEventOptions.Default);
+            OnlineService.SendPointExplode(new PointExplodeData
+            {
+                PointId = id,
+                SumScore = sumScore
+            });
 
             ExplodePoint(objectTouched);
         };
@@ -342,19 +342,19 @@ public class PlayboardOnlineVersusManager : CommonManager
         SetSelfScore();
     }
 
-    private void PointExplodeFromOponent(short pointId, byte sumScore)
+    private void PointExplodeFromOponent(PointExplodeData pointExplode)
     {
         //var point = _listGamePointsGenerated.Single(o => o.Id == pointId);
-        var objectTouched = GameObject.Find("Point-" + pointId);
+        var objectTouched = GameObject.Find("Point-" + pointExplode.PointId);
         ExplodePoint(objectTouched);
-        _currentOtherScore += sumScore;
+        _currentOtherScore += pointExplode.SumScore;
         SetOtherScore();
     }
 
     private void OnApplicationQuit()
     {
-        if (Client != null)
-            Client.Disconnect();
+        if (OnlineService != null)
+            OnlineService.Dispose();
     }
 
     private void SetTimer()
