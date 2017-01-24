@@ -10,7 +10,7 @@ namespace Assets.Scripts.OnlineServices
 {
     public class PowerFingerBalancingClient : LoadBalancingClient, IOnlineService
     {
-        private Action _onRoomFullAction;
+        private Action<RoomFullData> _onRoomFullAction;
         private Action<PointExplodeData> _onPointExplodeAction;
 
         private static PowerFingerBalancingClient _client;
@@ -74,7 +74,11 @@ namespace Assets.Scripts.OnlineServices
             {
                 case EventCode.Join:
                     if (_onRoomFullAction != null && CurrentRoom.PlayerCount == 2)
-                        _onRoomFullAction();
+                        _onRoomFullAction(new RoomFullData
+                        {
+                            FirstPlayerNickName = CurrentRoom.Players.First().Value.NickName,
+                            SecondPlayerNickName = CurrentRoom.Players.Last().Value.NickName
+                        });
                     break;
                 case (byte)EventDataCode.PointExplode:
                     if (_onPointExplodeAction != null)
@@ -92,14 +96,20 @@ namespace Assets.Scripts.OnlineServices
             }
         }
 
-        public bool CreateRoom(string roomId)
+        public bool CreateRoom(string roomId = null)
         {
-            throw new NotImplementedException();
+            return OpCreateRoom(roomId, new RoomOptions
+            {
+                MaxPlayers = 2,
+                EmptyRoomTtl = 2000,
+                PlayerTtl = 2000,
+                CheckUserOnJoin = true
+            }, TypedLobby.Default);
         }
 
-        public bool JoinRoom(string roomId)
+        public bool JoinRoom(string roomId = null)
         {
-            throw new NotImplementedException();
+            return String.IsNullOrEmpty(roomId) ? OpJoinRandomRoom(null, 0) : OpJoinRoom(roomId);
         }
 
         public bool LeaveRoom()
@@ -127,7 +137,7 @@ namespace Assets.Scripts.OnlineServices
             return OpRaiseEvent((byte)EventDataCode.PointExplode, evData, true, RaiseEventOptions.Default);
         }
 
-        public void SetOnRoomFullEvent(Action action)
+        public void SetOnRoomFullEvent(Action<RoomFullData> action)
         {
             _onRoomFullAction = action;
         }

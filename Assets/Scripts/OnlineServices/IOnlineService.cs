@@ -7,13 +7,13 @@ namespace Assets.Scripts.OnlineServices
 {
     public interface IOnlineService : IDisposable
     {
-        void SetOnRoomFullEvent(Action action);
+        void SetOnRoomFullEvent(Action<RoomFullData> action);
         void SetOnPointExplodeEvent(Action<PointExplodeData> action);
 
         void Initialize();
         OnlineStatus GetConnectionStatus();
-        bool CreateRoom(string roomId);
-        bool JoinRoom(string roomId);
+        bool CreateRoom(string roomId = null);
+        bool JoinRoom(string roomId = null);
         bool LeaveRoom();
         bool SendPointExplode(PointExplodeData data);
         bool Sync();

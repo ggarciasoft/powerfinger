@@ -8,6 +8,7 @@ using ExitGames.Client.Photon.LoadBalancing;
 using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.SceneManagement;
+using Assets.Scripts.OnlineServices;
 
 public class PlayboardOnlineVersusManager : CommonManager
 {
@@ -121,7 +122,6 @@ public class PlayboardOnlineVersusManager : CommonManager
         UpdateServerService = true;
 
         OnlineService.SetOnRoomFullEvent(OnRoomFull);
-
         OnlineService.SetOnPointExplodeEvent(PointExplodeFromOponent);;
 
         Initialize();
@@ -165,11 +165,11 @@ public class PlayboardOnlineVersusManager : CommonManager
         InvokeRepeating("ShowWaitingForPlayer", 0, 0.01f);
     }
 
-    private void OnRoomFull()
+    private void OnRoomFull(RoomFullData data)
     {
         _gameInitiate = true;
-        TxtNameP1.text = OnlineService.CurrentRoom.Players.First().Value.NickName;
-        TxtNameP2.text = OnlineService.CurrentRoom.Players.Last().Value.NickName;
+        TxtNameP1.text = data.FirstPlayerNickName;
+        TxtNameP2.text = data.SecondPlayerNickName;
         InvokeRepeating("HideBlockImage", 0, 0.01f);
     }
 

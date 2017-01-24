@@ -41,7 +41,7 @@ public class ManagerButtonsEvent : CommonManager
     {
         IsFirstPlayer = false;
         UpdateServerService = false;
-        var join = OnlineService.OpJoinRoom("Room1");
+        var join = OnlineService.JoinRoom();
 
         if (!join) return;
 
@@ -109,13 +109,7 @@ public class ManagerButtonsEvent : CommonManager
     public void ClickCreate()
     {
         IsFirstPlayer = true;
-        var join = OnlineService.OpCreateRoom(null, new RoomOptions
-        {
-            MaxPlayers = 2,
-            EmptyRoomTtl = 2000,
-            PlayerTtl = 2000,
-            CheckUserOnJoin = true
-        }, TypedLobby.Default);
+        var join = OnlineService.CreateRoom();
 
         if (!join) return;
 
