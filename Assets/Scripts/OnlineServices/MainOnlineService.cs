@@ -11,7 +11,15 @@ namespace Assets.Scripts.OnlineServices
         {
             get
             {
-                return (IOnlineService)new object();// PowerFingerBalancingClient.Instance;
+                return PowerFingerBalancingClient.Instance;
+            }
+        }
+
+        public static AuthenticationService AuthService
+        {
+            get
+            {
+                return AuthenticationService.Instance;
             }
         }
     }

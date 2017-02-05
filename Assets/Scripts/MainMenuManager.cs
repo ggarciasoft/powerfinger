@@ -63,7 +63,6 @@ public class MainMenuManager : CommonManager
     {
         "pnlSettings".Hide();
         "pnlCreateGame".Hide();
-        UpdateServerService = true;
 
         _camHalfHeight = Camera.main.orthographicSize;
         _camHalfWidth = Camera.main.aspect * _camHalfHeight;
@@ -72,15 +71,27 @@ public class MainMenuManager : CommonManager
 
         txtNickname.text = Preferences.Nickname;
 
-        if (BackFromGame)
+        System.Action<bool> init = (val) =>
         {
-            InvokeRepeating("HideBlockImageAndText", 0, 0.01f);
-            BackFromGame = false;
-        }
-        else
-            InvokeRepeating("ShowTextBlockImage", 0, 0.01f);
+            if (val)
+            {
+                if (BackFromGame)
+                {
+                    InvokeRepeating("HideBlockImageAndText", 0, 0.01f);
+                    BackFromGame = false;
+                }
+                else
+                    InvokeRepeating("ShowTextBlockImage", 0, 0.01f);
 
-        InitializeServer();
+                InitializeServer();
+                UpdateServerService = true;
+            }
+        };
+
+        if (MainOnlineService.AuthService.IsLogged())
+            init(true);
+        else
+            MainOnlineService.AuthService.SignIn(init);
     }
 
     private void ShowTextBlockImage()

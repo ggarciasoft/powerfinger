@@ -62,6 +62,7 @@ namespace Assets.Scripts
         protected static bool IsFirstPlayer { get; set; }
         protected static bool UpdateServerService { get; set; }
         protected static bool BackFromGame { get; set; }
+        protected static bool InitiateGame { get; set; }
         #endregion
 
         #region Methods
