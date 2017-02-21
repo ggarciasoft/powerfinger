@@ -1,3 +1,0 @@
-# powerfinger
-
-SHA1: F0:69:EE:A0:4C:E0:B3:2D:CD:F4:48:80:38:00:96:F6:FE:8A:F1:DD

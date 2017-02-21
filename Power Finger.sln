@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Power Finger.Plugins", "Pow
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Power Finger", "Power Finger.csproj", "{294FF331-E434-905C-BCA0-F12BFA824CBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Power Finger.Editor", "Power Finger.Editor.csproj", "{521CE1B7-EE7C-BD8E-11BE-7DC751C3E597}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,10 +19,6 @@ Global
 		{294FF331-E434-905C-BCA0-F12BFA824CBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{294FF331-E434-905C-BCA0-F12BFA824CBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{294FF331-E434-905C-BCA0-F12BFA824CBA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{521CE1B7-EE7C-BD8E-11BE-7DC751C3E597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{521CE1B7-EE7C-BD8E-11BE-7DC751C3E597}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{521CE1B7-EE7C-BD8E-11BE-7DC751C3E597}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{521CE1B7-EE7C-BD8E-11BE-7DC751C3E597}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
