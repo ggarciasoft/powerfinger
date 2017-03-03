@@ -1,9 +1,10 @@
-﻿//using GooglePlayGames;
-//using GooglePlayGames.BasicApi;
+﻿using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Assets.Scripts.OnlineServices
 {
@@ -26,9 +27,9 @@ namespace Assets.Scripts.OnlineServices
 
         public AuthenticationService()
         {
-         /*   PlayGamesClientConfiguration config = new
-          PlayGamesClientConfiguration.Builder()
-          .Build();
+            /*var config = new
+            PlayGamesClientConfiguration.Builder()
+            .Build();
 
             // Enable debugging output (recommended)
             PlayGamesPlatform.DebugLogEnabled = true;
@@ -40,8 +41,7 @@ namespace Assets.Scripts.OnlineServices
 
         public bool IsLogged()
         {
-            //return PlayGamesPlatform.Instance.localUser.authenticated;
-            return true;
+            return true;// PlayGamesPlatform.Instance.localUser.authenticated;
         }
 
         /// <summary>
@@ -50,15 +50,17 @@ namespace Assets.Scripts.OnlineServices
         /// <param name="callBack"></param>
         public void SignIn(Action<bool> callBack)
         {
-            /*Action<bool> innerCallBack = (val) =>
+            Social.localUser.Authenticate(callBack);
+            /*
+            Action<bool> innerCallBack = (val) =>
             {
                 if (val)
                     callBack(true);
                 else
-                    PlayGamesPlatform.Instance.Authenticate(callBack, false);
+                    PlayGamesPlatform.Instance.Authenticate(callBack, true);
             };
 
-            PlayGamesPlatform.Instance.Authenticate(innerCallBack, true);*/
+            PlayGamesPlatform.Instance.Authenticate(innerCallBack, false);*/
         }
     }
 }

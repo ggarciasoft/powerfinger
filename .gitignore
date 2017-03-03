@@ -1,2 +1,5 @@
 Library/ShaderCache/
 Library/metadata/
+Build Exe/
+*.apk
+Temp/

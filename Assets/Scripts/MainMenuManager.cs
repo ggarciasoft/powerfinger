@@ -82,10 +82,11 @@ public class MainMenuManager : CommonManager
                 }
                 else
                     InvokeRepeating("ShowTextBlockImage", 0, 0.01f);
-
                 InitializeServer();
                 UpdateServerService = true;
             }
+            else
+                MessageBox("Login failed");
         };
 
         if (MainOnlineService.AuthService.IsLogged())
