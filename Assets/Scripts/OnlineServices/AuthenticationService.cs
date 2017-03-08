@@ -41,7 +41,7 @@ namespace Assets.Scripts.OnlineServices
 
         public bool IsLogged()
         {
-            return true;// PlayGamesPlatform.Instance.localUser.authenticated;
+            return false;//Social.localUser.authenticated;// PlayGamesPlatform.Instance.localUser.authenticated;
         }
 
         /// <summary>

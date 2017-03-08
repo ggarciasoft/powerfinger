@@ -23,12 +23,6 @@ public class ManagerButtonsEvent : CommonManager
         SceneManager.LoadScene(index);
     }
 
-    public void ClickMessageBoxOk()
-    {
-        var pnlMessageBox = GameObject.Find("pnlMessageBox");
-        Destroy(pnlMessageBox);
-    }
-
     #region Main Menu Buttons
 
     public void ClickCreateGame()
@@ -61,7 +55,7 @@ public class ManagerButtonsEvent : CommonManager
 
     public void ClickMainMenuSettings()
     {
-        GameObject.Find("txtNickname").GetComponent<InputField>().text = Preferences.Nickname;
+        //GameObject.Find("txtNickname").GetComponent<InputField>().text = Preferences.Nickname;
         GameObject.Find("sldMusic").GetComponent<Slider>().value = Preferences.MusicVolume;
         GameObject.Find("sldSound").GetComponent<Slider>().value = Preferences.SoundVolume;
         "pnlMainMenu".Hide();
@@ -73,14 +67,8 @@ public class ManagerButtonsEvent : CommonManager
 
     public void ClickSaveSettings()
     {
-        var nickname = GameObject.Find("txtNickname").GetComponent<InputField>();
         var music = GameObject.Find("sldMusic").GetComponent<Slider>();
         var sound = GameObject.Find("sldSound").GetComponent<Slider>();
-        if (String.IsNullOrEmpty(nickname.text))
-            nickname.text = Guid.NewGuid().ToString().Replace('-', ' ');
-        nickname.text = nickname.text.Length > 10 ? nickname.text.Substring(0, 10) : nickname.text;
-
-        Preferences.Nickname = nickname.text;
         Preferences.MusicVolume = music.value;
         Preferences.SoundVolume = sound.value;
         MessageBox("Settings saved successfully!");

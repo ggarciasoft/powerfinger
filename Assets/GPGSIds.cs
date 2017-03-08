@@ -24,7 +24,12 @@
 
 public static class GPGSIds
 {
+        public const string achievement_first_buy = "CgkIoeKrhYMLEAIQBQ"; // <GPGSID>
+        public const string achievement_500_point = "CgkIoeKrhYMLEAIQBA"; // <GPGSID>
+        public const string achievement_first_step = "CgkIoeKrhYMLEAIQAg"; // <GPGSID>
+        public const string achievement_3_win = "CgkIoeKrhYMLEAIQBg"; // <GPGSID>
         public const string leaderboard_more_explosions = "CgkIoeKrhYMLEAIQAQ"; // <GPGSID>
+        public const string achievement_100_point = "CgkIoeKrhYMLEAIQAw"; // <GPGSID>
 
 }
 

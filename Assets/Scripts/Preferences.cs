@@ -30,28 +30,6 @@ namespace Assets.Scripts
             }
         }
 
-        public static string Nickname
-        {
-            get
-            {
-                var nickName = PlayerPrefs.GetString("Nickname");
-                if (String.IsNullOrEmpty(nickName))
-                {
-                    nickName = "Guess" + Guid.NewGuid().ToString().Replace('-', ' ').Substring(0, 13);
-                    PlayerPrefs.SetString("Nickname", nickName);
-                }
-                return nickName;
-            }
-            set
-            {
-                var nickName = value;
-                if (String.IsNullOrEmpty(nickName))
-                    nickName = "Guess" + Guid.NewGuid().ToString().Replace('-', ' ').Substring(0, 13);
-
-                PlayerPrefs.SetString("Nickname", nickName);
-            }
-        }
-
         public static float MusicVolume
         {
             get

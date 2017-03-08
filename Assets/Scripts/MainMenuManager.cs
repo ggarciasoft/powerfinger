@@ -69,8 +69,6 @@ public class MainMenuManager : CommonManager
 
         _lstInstatiatePoints = new List<GameObject>();
 
-        txtNickname.text = Preferences.Nickname;
-
         System.Action<bool> init = (val) =>
         {
             if (val)

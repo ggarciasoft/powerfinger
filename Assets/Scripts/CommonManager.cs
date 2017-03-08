@@ -95,13 +95,22 @@ namespace Assets.Scripts
             BlockImage.color = new Color(255, 255, 255, BlockImage.color.a - 0.01f);
         }
 
-        protected void MessageBox(string message)
+        protected void MessageBox(string message, Action action = null)
         {
             var pnlMessageBox = Instantiate(
-                Resources.LoadAll("pnlMessageBox")[0], 
+                Resources.LoadAll("pnlMessageBox")[0],
                 GameObject.Find("Canvas").transform, false) as GameObject;
             pnlMessageBox.name = "pnlMessageBox";
             GameObject.Find("lblMessage").GetComponent<Text>().text = message;
+            if (action != null)
+                GameObject.Find("btnOk").GetComponent<Button>().onClick.AddListener(() => action());
+            GameObject.Find("btnOk").GetComponent<Button>().onClick.AddListener(ClickMessageBoxOk);
+        }
+
+        public void ClickMessageBoxOk()
+        {
+            var pnlMessageBox = GameObject.Find("pnlMessageBox");
+            Destroy(pnlMessageBox);
         }
         #endregion
     }
