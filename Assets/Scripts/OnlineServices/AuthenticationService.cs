@@ -27,7 +27,7 @@ namespace Assets.Scripts.OnlineServices
 
         public AuthenticationService()
         {
-            /*var config = new
+            var config = new
             PlayGamesClientConfiguration.Builder()
             .Build();
 
@@ -36,7 +36,7 @@ namespace Assets.Scripts.OnlineServices
 
             // Initialize and activate the platform
             PlayGamesPlatform.InitializeInstance(config);
-            PlayGamesPlatform.Activate();*/
+            PlayGamesPlatform.Activate();
         }
 
         public bool IsLogged()
@@ -50,7 +50,8 @@ namespace Assets.Scripts.OnlineServices
         /// <param name="callBack"></param>
         public void SignIn(Action<bool> callBack)
         {
-            Social.localUser.Authenticate(callBack);
+            //PlayGamesPlatform.Instance.Authenticate(callBack, false);
+            Social.Active.localUser.Authenticate(callBack);
             /*
             Action<bool> innerCallBack = (val) =>
             {

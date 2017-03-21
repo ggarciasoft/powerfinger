@@ -55,11 +55,15 @@ public class ManagerButtonsEvent : CommonManager
 
     public void ClickMainMenuSettings()
     {
-        //GameObject.Find("txtNickname").GetComponent<InputField>().text = Preferences.Nickname;
         GameObject.Find("sldMusic").GetComponent<Slider>().value = Preferences.MusicVolume;
         GameObject.Find("sldSound").GetComponent<Slider>().value = Preferences.SoundVolume;
         "pnlMainMenu".Hide();
         "pnlSettings".Show();
+    }
+
+    public void ClickLeaderboard()
+    {
+        Social.ShowLeaderboardUI();
     }
     #endregion
 
