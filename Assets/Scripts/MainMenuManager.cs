@@ -84,7 +84,7 @@ public class MainMenuManager : CommonManager
                 UpdateServerService = true;
             }
             else
-                MessageBox("Login failed");
+                MessageBox("Login failed", () => Application.Quit());
         };
 
         if (MainOnlineService.AuthService.IsLogged())
