@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Power Finger.Plugins", "Power Finger.Plugins.csproj", "{C6F8ED5F-8F75-73F5-3AB1-722FAF0B60AD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Power Finger", "Power Finger.csproj", "{294FF331-E434-905C-BCA0-F12BFA824CBA}"

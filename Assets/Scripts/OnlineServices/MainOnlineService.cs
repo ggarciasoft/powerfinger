@@ -11,7 +11,7 @@ namespace Assets.Scripts.OnlineServices
         {
             get
             {
-                return PowerFingerBalancingClient.Instance;
+                return GooglePlayGamesService.Instance;
             }
         }
 

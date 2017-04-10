@@ -1,3 +1,7 @@
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore release.keystore "power finger.apk" release
 
 "C:\Program Files (x86)\Android\android-sdk\build-tools\25.0.0\zipalign.exe" -v 4 "power finger.apk" "power finger signed.apk"
+
+
+keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000
+keytool -exportcert -alias release -keystore release.keystore -list -v

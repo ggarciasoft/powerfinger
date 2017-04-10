@@ -20,10 +20,10 @@ namespace Assets.Scripts.OnlineServices
             get
             {
                 if (_client == null)
-                {
-                    _client = new PowerFingerBalancingClient();
-                    _client.AppId = "bca9b338-6e2a-4c80-b665-e884285f1f78";
-                }
+                    _client = new PowerFingerBalancingClient()
+                    {
+                        AppId = "bca9b338-6e2a-4c80-b665-e884285f1f78"
+                    };
 
                 return _client;
             }
