@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 namespace Assets.Scripts.OnlineServices
@@ -69,12 +68,11 @@ namespace Assets.Scripts.OnlineServices
 
         public bool SendPointExplode(PointExplodeData data)
         {
-            var b = new BinaryFormatter();
-            using (var m = new MemoryStream())
-            {
-                b.Serialize(m, data);
-                RealTime.SendMessageToAll(true, m.ToArray());
-            }
+            //byte + short length
+            var arr = new List<byte>(3);
+            arr.Add(data.SumScore);
+            arr.AddRange(BitConverter.GetBytes(data.PointId));
+            RealTime.SendMessageToAll(true, arr.ToArray());
             return true;
         }
 
@@ -93,11 +91,16 @@ namespace Assets.Scripts.OnlineServices
             return true;
         }
 
+        public void SetOnOponentLeaveRoomEvent(Action action)
+        {
+            _listenerInstance.OnOponentLeftAction = action;
+        }
 
         private class RealTimeMultiplayerListenerImplementation : RealTimeMultiplayerListener
         {
             public Action<RoomFullData> OnRoomFullAction { get; set; }
             public Action<PointExplodeData> OnPointExplodeAction { get; set; }
+            public Action OnOponentLeftAction { get; set; }
 
             public RealTimeMultiplayerListenerImplementation()
             {
@@ -114,28 +117,31 @@ namespace Assets.Scripts.OnlineServices
 
             public void OnPeersConnected(string[] participantIds)
             {
-                var participants = PlayGamesPlatform.Instance.RealTime.GetConnectedParticipants();
-                if (participants.Count == 2)
-                    OnRoomFullAction(new RoomFullData
-                    {
-                        FirstPlayerNickName = participants[0].DisplayName,
-                        SecondPlayerNickName = participants[1].DisplayName
-                    });
             }
 
             public void OnPeersDisconnected(string[] participantIds)
             {
+                OnOponentLeftAction();
             }
 
             public void OnRealTimeMessageReceived(bool isReliable, string senderId, byte[] data)
             {
-                var b = new BinaryFormatter();
-                using (var m = new MemoryStream(data))
-                    OnPointExplodeAction((PointExplodeData)b.Deserialize(m));
+                OnPointExplodeAction(new PointExplodeData
+                {
+                    SumScore = data[0],
+                    PointId = BitConverter.ToInt16(data, 1)
+                });
             }
 
             public void OnRoomConnected(bool success)
             {
+                var participants = PlayGamesPlatform.Instance.RealTime.GetConnectedParticipants();
+                if (participants.Count == 2)
+                    OnRoomFullAction(new RoomFullData
+                    {
+                        FirstPlayerNickName = participants[1].DisplayName,
+                        SecondPlayerNickName = participants[0].DisplayName
+                    });
             }
 
             public void OnRoomSetupProgress(float percent)

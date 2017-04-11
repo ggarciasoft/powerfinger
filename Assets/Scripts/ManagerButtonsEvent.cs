@@ -35,7 +35,7 @@ public class ManagerButtonsEvent : CommonManager
     {
         IsFirstPlayer = false;
         UpdateServerService = false;
-        var join = OnlineService.JoinRoom();
+        var join = OnlineService.CreateRoom();
 
         if (!join) return;
 

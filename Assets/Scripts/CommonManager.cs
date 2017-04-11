@@ -76,7 +76,7 @@ namespace Assets.Scripts
             {
                 CancelInvoke("ShowBlockImage");
                 if (ActionWhenBlockImageToggle != null)
-                    ActionWhenBlockImageToggle();
+                    ActionWhenBlockImageToggle.Invoke();
                 return;
             }
             BlockImage.color = new Color(255, 255, 255, BlockImage.color.a + 0.01f);
@@ -89,25 +89,32 @@ namespace Assets.Scripts
                 CancelInvoke("HideBlockImage");
                 BlockImageSetActive(false);
                 if (ActionWhenBlockImageToggle != null)
-                    ActionWhenBlockImageToggle();
+                    ActionWhenBlockImageToggle.Invoke();
                 return;
             }
             BlockImage.color = new Color(255, 255, 255, BlockImage.color.a - 0.01f);
         }
 
-        protected void MessageBox(string message, Action action = null)
+        protected void MessageBox(string message, Action onOk = null, Action onClose = null)
         {
             var pnlMessageBox = Instantiate(
                 Resources.LoadAll("pnlMessageBox")[0],
                 GameObject.Find("Canvas").transform, false) as GameObject;
             pnlMessageBox.name = "pnlMessageBox";
-            GameObject.Find("lblMessage").GetComponent<Text>().text = message;
-            if (action != null)
-                GameObject.Find("btnOk").GetComponent<Button>().onClick.AddListener(() => action());
-            GameObject.Find("btnOk").GetComponent<Button>().onClick.AddListener(ClickMessageBoxOk);
+            pnlMessageBox.transform.Find("lblMessage").GetComponent<Text>().text = message;
+
+            if (onOk != null)
+                pnlMessageBox.transform.Find("btnOk").GetComponent<Button>().onClick.AddListener(() => onOk());
+            else
+                Destroy(pnlMessageBox.transform.Find("btnOk"));
+
+            if (onClose != null)
+                pnlMessageBox.transform.Find("btnClose").GetComponent<Button>().onClick.AddListener(() => onClose());
+
+            pnlMessageBox.transform.Find("btnClose").GetComponent<Button>().onClick.AddListener(ClickMessageBoxClose);
         }
 
-        public void ClickMessageBoxOk()
+        public void ClickMessageBoxClose()
         {
             var pnlMessageBox = GameObject.Find("pnlMessageBox");
             Destroy(pnlMessageBox);

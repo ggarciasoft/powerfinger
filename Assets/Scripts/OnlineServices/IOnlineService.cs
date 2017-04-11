@@ -9,6 +9,7 @@ namespace Assets.Scripts.OnlineServices
     {
         void SetOnRoomFullEvent(Action<RoomFullData> action);
         void SetOnPointExplodeEvent(Action<PointExplodeData> action);
+        void SetOnOponentLeaveRoomEvent(Action action);
 
         void Initialize();
         OnlineStatus GetConnectionStatus();

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Assets.Scripts.OnlineServices
 {
+    [Serializable]
     public class PointExplodeData
     {
         public short PointId { get; set; }

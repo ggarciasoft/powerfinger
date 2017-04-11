@@ -1,14 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
 using Assets.Scripts;
-using ExitGames.Client.Photon.LoadBalancing;
-using ExitGames.Client.Photon;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.SceneManagement;
 using Assets.Scripts.OnlineServices;
+using UnityEngine.Events;
 
 public class PlayboardOnlineVersusManager : CommonManager
 {
@@ -20,7 +17,7 @@ public class PlayboardOnlineVersusManager : CommonManager
     private GameObject _playboard;
     private Text _txtTimer, _txtScoreP1, _txtScoreP2, _txtNameP1, _txtNameP2, _lblWaitingForPlayer;
     private float _timerCount = 30f;
-    private bool _gameInitiate;
+    private bool _gameInitiate, _tryLeavingRoom;
     private short _currentSelfScore, _currentOtherScore;
 
     private GameObject Playboard
@@ -122,7 +119,8 @@ public class PlayboardOnlineVersusManager : CommonManager
         UpdateServerService = true;
 
         OnlineService.SetOnRoomFullEvent(OnRoomFull);
-        OnlineService.SetOnPointExplodeEvent(PointExplodeFromOponent);;
+        OnlineService.SetOnPointExplodeEvent(PointExplodeFromOponent);
+        OnlineService.SetOnOponentLeaveRoomEvent(OponentLeaveRoom);
 
         Initialize();
 
@@ -234,8 +232,8 @@ public class PlayboardOnlineVersusManager : CommonManager
                pointToExplode.transform.position.z),
            Quaternion.identity) as GameObject;
 
-        var particle = _temp.GetComponent<ParticleSystem>();
-        particle.playbackSpeed = 2f;
+        var particle = _temp.GetComponent<ParticleSystem>().main;
+        particle.simulationSpeed = 2f;
         DestroyImmediate(pointToExplode);
 
         Destroy(_temp, 1.5f);
@@ -257,14 +255,14 @@ public class PlayboardOnlineVersusManager : CommonManager
             foreach (var item in lstPointToInstatiate)
             {
                 var point = _listGamePointsType[item.Type];
-                var particle = point.GetComponent<ParticleSystem>();
+                var particle = point.GetComponent<ParticleSystem>().main;
 
                 float x = Random.Range(-6.72f, 6.72f), y = Random.Range(-2.9f, 5.82f), z = 0;
 
                 item.Instatiated = true;
 
                 if (item.Type == GamePoint.GamePointType.NormalPoint)
-                    particle.playbackSpeed = 0.4f;
+                    particle.simulationSpeed = 0.4f;
 
                 point = Instantiate(point, new Vector3(x, y, z), Quaternion.identity) as GameObject;
                 point.name = "Point-" + item.Id;
@@ -274,6 +272,20 @@ public class PlayboardOnlineVersusManager : CommonManager
 
         _timerCount -= 0.01f;
         SetTimer();
+    }
+
+    private void LeaveRoom()
+    {
+        OnlineService.LeaveRoom();
+        BackFromGame = true;
+        SceneManager.LoadScene("GameFinish");
+    }
+
+    private void OponentLeaveRoom()
+    {
+        CancelInvoke("UpdateGame");
+        _gameInitiate = false;
+        MessageBox("Your oponent leave the room, you win!", onClose: () => SceneManager.LoadScene("GameFinish"));
     }
 
     private void Update()
@@ -290,8 +302,11 @@ public class PlayboardOnlineVersusManager : CommonManager
 
         if (!_gameInitiate) return;
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Application.Quit();
+        if (Input.GetKeyDown(KeyCode.Escape) && !_tryLeavingRoom)
+        {
+            _tryLeavingRoom = true;
+            MessageBox("If you leave the game, you will lose, are you sure?", LeaveRoom, () => _tryLeavingRoom = false);
+        }
 
         GameObject objectTouched = null;
         var isTouched = Input.GetMouseButtonDown(0) || Input.touchCount > 0;

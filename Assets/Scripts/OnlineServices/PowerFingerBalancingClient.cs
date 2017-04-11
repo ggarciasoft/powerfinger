@@ -146,5 +146,10 @@ namespace Assets.Scripts.OnlineServices
         {
             _onPointExplodeAction = action;
         }
+
+        public void SetOnOponentLeaveRoomEvent(Action action)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
