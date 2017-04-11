@@ -17,7 +17,7 @@ public class PlayboardOnlineVersusManager : CommonManager
     private GameObject _playboard;
     private Text _txtTimer, _txtScoreP1, _txtScoreP2, _txtNameP1, _txtNameP2, _lblWaitingForPlayer;
     private float _timerCount = 30f;
-    private bool _gameInitiate, _tryLeavingRoom;
+    private bool _gameInitiate, _tryLeavingRoom, _waitingStart;
     private short _currentSelfScore, _currentOtherScore;
 
     private GameObject Playboard
@@ -117,6 +117,7 @@ public class PlayboardOnlineVersusManager : CommonManager
     void Start()
     {
         UpdateServerService = true;
+        _waitingStart = true;
 
         OnlineService.SetOnRoomFullEvent(OnRoomFull);
         OnlineService.SetOnPointExplodeEvent(PointExplodeFromOponent);
@@ -166,6 +167,7 @@ public class PlayboardOnlineVersusManager : CommonManager
     private void OnRoomFull(RoomFullData data)
     {
         _gameInitiate = true;
+        _waitingStart = false;
         TxtNameP1.text = data.FirstPlayerNickName;
         TxtNameP2.text = data.SecondPlayerNickName;
         InvokeRepeating("HideBlockImage", 0, 0.01f);
@@ -199,7 +201,7 @@ public class PlayboardOnlineVersusManager : CommonManager
         if (LblWaitingForPlayer.color.a <= 0)
         {
             CancelInvoke("HideWaitingForPlayer");
-            if (!_gameInitiate)
+            if (_waitingStart)
                 InvokeRepeating("ShowWaitingForPlayer", 0, 0.01f);
             return;
         }
@@ -290,7 +292,7 @@ public class PlayboardOnlineVersusManager : CommonManager
 
     private void Update()
     {
-        if (!_gameInitiate && Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
+        if (_waitingStart && Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
         {
             OnlineService.LeaveRoom();
             BackFromGame = true;
@@ -300,7 +302,7 @@ public class PlayboardOnlineVersusManager : CommonManager
         if (UpdateServerService)
             OnlineService.Sync();
 
-        if (!_gameInitiate) return;
+        if (!_gameInitiate || _tryLeavingRoom) return;
 
         if (Input.GetKeyDown(KeyCode.Escape) && !_tryLeavingRoom)
         {
@@ -313,48 +315,48 @@ public class PlayboardOnlineVersusManager : CommonManager
 
         if (!isTouched) return;
 
-        System.Action<Vector3> actionObjectTouched = (position) =>
-        {
-            var ray = Camera.main.ScreenToWorldPoint(position);
-
-            var raycast = Physics2D.LinecastAll(ray, ray).FirstOrDefault();
-
-            if (raycast.collider == null) return;
-
-            if (!(raycast.collider.CompareTag("NormalPoint") || raycast.collider.CompareTag("SpecialPoint"))) return;
-
-            objectTouched = raycast.collider.gameObject;
-
-            var sumScore = byte.MinValue;
-
-            if (raycast.collider.CompareTag("NormalPoint"))
-                sumScore++;
-            else if (raycast.collider.CompareTag("SpecialPoint"))
-                sumScore += 5;
-
-            _currentSelfScore += sumScore;
-            var id = short.Parse(objectTouched.name.Split('-')[1]);
-
-            OnlineService.SendPointExplode(new PointExplodeData
-            {
-                PointId = id,
-                SumScore = sumScore
-            });
-
-            ExplodePoint(objectTouched);
-        };
-
         if (Input.GetMouseButtonDown(0))
-            actionObjectTouched(Input.mousePosition);
+            OnObjectTouched(objectTouched, Input.mousePosition);
         else
             for (int i = 0; i < Input.touchCount; i++)
             {
                 var touch = Input.GetTouch(i);
                 if (touch.phase != TouchPhase.Began) continue;
-                actionObjectTouched(touch.position);
+                OnObjectTouched(objectTouched, touch.position);
             }
 
         SetSelfScore();
+    }
+
+    private void OnObjectTouched(GameObject objectTouched, Vector3 position)
+    {
+        var ray = Camera.main.ScreenToWorldPoint(position);
+
+        var raycast = Physics2D.LinecastAll(ray, ray).FirstOrDefault();
+
+        if (raycast.collider == null) return;
+
+        if (!(raycast.collider.CompareTag("NormalPoint") || raycast.collider.CompareTag("SpecialPoint"))) return;
+
+        objectTouched = raycast.collider.gameObject;
+
+        var sumScore = byte.MinValue;
+
+        if (raycast.collider.CompareTag("NormalPoint"))
+            sumScore++;
+        else if (raycast.collider.CompareTag("SpecialPoint"))
+            sumScore += 5;
+
+        _currentSelfScore += sumScore;
+        var id = short.Parse(objectTouched.name.Split('-')[1]);
+
+        OnlineService.SendPointExplode(new PointExplodeData
+        {
+            PointId = id,
+            SumScore = sumScore
+        });
+
+        ExplodePoint(objectTouched);
     }
 
     private void PointExplodeFromOponent(PointExplodeData pointExplode)

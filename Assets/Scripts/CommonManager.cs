@@ -101,22 +101,21 @@ namespace Assets.Scripts
                 Resources.LoadAll("pnlMessageBox")[0],
                 GameObject.Find("Canvas").transform, false) as GameObject;
             pnlMessageBox.name = "pnlMessageBox";
-            pnlMessageBox.transform.Find("lblMessage").GetComponent<Text>().text = message;
+            pnlMessageBox.transform.Find("Panel/lblMessage").GetComponent<Text>().text = message;
 
             if (onOk != null)
-                pnlMessageBox.transform.Find("btnOk").GetComponent<Button>().onClick.AddListener(() => onOk());
+                pnlMessageBox.transform.Find("Panel/Panel/btnOk").GetComponent<Button>().onClick.AddListener(() => onOk());
             else
-                Destroy(pnlMessageBox.transform.Find("btnOk"));
+                Destroy(pnlMessageBox.transform.Find("Panel/Panel/btnOk"));
 
             if (onClose != null)
-                pnlMessageBox.transform.Find("btnClose").GetComponent<Button>().onClick.AddListener(() => onClose());
+                pnlMessageBox.transform.Find("Panel/Panel/btnClose").GetComponent<Button>().onClick.AddListener(() => onClose());
 
-            pnlMessageBox.transform.Find("btnClose").GetComponent<Button>().onClick.AddListener(ClickMessageBoxClose);
+            pnlMessageBox.transform.Find("Panel/Panel/btnClose").GetComponent<Button>().onClick.AddListener(()=> ClickMessageBoxClose(pnlMessageBox));
         }
 
-        public void ClickMessageBoxClose()
+        public void ClickMessageBoxClose(GameObject pnlMessageBox)
         {
-            var pnlMessageBox = GameObject.Find("pnlMessageBox");
             Destroy(pnlMessageBox);
         }
         #endregion
