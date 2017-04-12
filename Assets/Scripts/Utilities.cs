@@ -3,7 +3,6 @@ using System.Collections;
 
 public static class Utilities
 {
-
     public static void ParticleColorOverLifetime(this GameObject obj, bool enabled)
     {
         if (obj != null)

@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
 using Assets.Scripts;
+using Assets.Scripts.OnlineServices;
 
 public class ManagerButtonsEvent : CommonManager
 {
@@ -119,6 +120,11 @@ public class ManagerButtonsEvent : CommonManager
     }
 
     #endregion
+
+    public void ClickReviewConfiguration()
+    {
+        MessageBox(AuthenticationService.Instance.ReviewConfiguration());
+    }
 
     #endregion
 }

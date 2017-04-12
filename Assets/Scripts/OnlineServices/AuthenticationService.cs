@@ -1,5 +1,7 @@
 ﻿using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using PlayFab;
+using PlayFab.ClientModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,7 @@ namespace Assets.Scripts.OnlineServices
         {
             var config = new
             PlayGamesClientConfiguration.Builder()
+            .AddOauthScope("profile")
             .Build();
 
             // Enable debugging output (recommended)
@@ -41,7 +44,15 @@ namespace Assets.Scripts.OnlineServices
 
         public bool IsLogged()
         {
-            return false;// PlayGamesPlatform.Instance.localUser.authenticated;
+            return Social.localUser.authenticated && PlayFabClientAPI.IsClientLoggedIn();// PlayGamesPlatform.Instance.localUser.authenticated;
+        }
+        
+        public string ReviewConfiguration()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("GPGS Is Logged: " + Social.localUser.authenticated);
+            sb.AppendLine("PlayFab Is Logged: " + PlayFabClientAPI.IsClientLoggedIn());
+            return sb.ToString();
         }
 
         /// <summary>
@@ -55,9 +66,25 @@ namespace Assets.Scripts.OnlineServices
             {
                 if (success)
                 {
-                    //PlayFabClientAPI
+                    PlayGamesPlatform.Instance.GetServerAuthCode((code, authToken) =>
+                    {
+                        Debug.LogError("Code Return ServerAuthCode: " + code);
+                        PlayFabClientAPI.LoginWithGoogleAccount(new LoginWithGoogleAccountRequest()
+                        {
+                            TitleId = PlayFabSettings.TitleId,
+                            ServerAuthCode = authToken,
+                            CreateAccount = true
+                        }, (successLoginResult) =>
+                        {
+                            Debug.LogFormat("Login With Google Success: ", successLoginResult.PlayFabId);
+                            callBack(success);
+                        }, (errorResult) =>
+                        {
+                            Debug.Log(errorResult.GenerateErrorReport());
+                            callBack(success);
+                        });
+                    });
                 }
-                callBack(success);
             });
             /*
             Action<bool> innerCallBack = (val) =>
