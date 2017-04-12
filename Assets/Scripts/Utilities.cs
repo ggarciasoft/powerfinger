@@ -56,4 +56,9 @@ public static class Utilities
     {
         GameObject.Find(ctrlName).Show();
     }
+
+    public static bool AlmostEquals(this float double1, float double2, float precision = 0.0000001f)
+    {
+        return (System.Math.Abs(double1 - double2) <= precision);
+    }
 }

@@ -11,13 +11,13 @@ public class PlayboardLocalVersusManager : CommonManager
 
     private Dictionary<GamePoint.GamePointType, GameObject> _listGamePointsType;
     private List<GamePoint> _listGamePointsGenerated;
-    private GameObject _playboard;
+    //private GameObject _playboard;
     private Text _txtTimer;
     private float _timerCount = 30f;
 
     void Start()
     {
-        _playboard = GameObject.Find("Playboard");
+        //_playboard = GameObject.Find("Playboard");
         _txtTimer = GameObject.Find("txtTimer").GetComponent<Text>();
         _listGamePointsType = new Dictionary<GamePoint.GamePointType, GameObject>();
         _listGamePointsGenerated = new List<GamePoint>();
@@ -88,8 +88,8 @@ public class PlayboardLocalVersusManager : CommonManager
                 countDownPoint.transform.position.z),
             Quaternion.identity) as GameObject;
 
-        var particle = _temp.GetComponent<ParticleSystem>();
-        particle.playbackSpeed = 5f;
+        var particle = _temp.GetComponent<ParticleSystem>().main;
+        particle.simulationSpeed = 5f;
         DestroyImmediate(countDownPoint);
 
         Destroy(_temp, 1.5f);
@@ -106,7 +106,7 @@ public class PlayboardLocalVersusManager : CommonManager
             foreach (var item in lstPointToInstatiate)
             {
                 var point = _listGamePointsType[item.Type];
-                var particle = point.GetComponent<ParticleSystem>();
+                var particle = point.GetComponent<ParticleSystem>().main;
 
                 point.ParticleColorOverLifetime(item.IsFirstPlayer ? "#6A6BFFFF" : "#FF6776FF");
 
@@ -115,16 +115,16 @@ public class PlayboardLocalVersusManager : CommonManager
                 item.Instatiated = true;
 
                 if (item.Type == GamePoint.GamePointType.NormalPoint)
-                    particle.playbackSpeed = 0.4f;
+                    particle.simulationSpeed = 0.4f;
 
                 point = Instantiate(point, new Vector3(x, y, z), Quaternion.identity) as GameObject;
 
                 if (Input.GetMouseButtonDown(0) && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
                 {
-                    var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 
                     /*var touchPosWorld = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                    var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     var touchPosWorld2D = new Vector2(touchPosWorld.x, touchPosWorld.y);
                     var hitInformation = Physics2D.Raycast(touchPosWorld2D, Camera.main.transform.forward);
 

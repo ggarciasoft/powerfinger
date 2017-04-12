@@ -20,10 +20,10 @@ MonoBehaviour:
     y: 30
     width: 1366
     height: 635
-  m_MinSize: {x: 581, y: 442}
-  m_MaxSize: {x: 12006, y: 8042}
+  m_MinSize: {x: 579, y: 421}
+  m_MaxSize: {x: 12004, y: 8021}
   vertical: 0
-  controlID: 4647
+  controlID: 9634
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 349
+    y: 424
     width: 1057
     height: 282
   m_MaximizeOnPlay: 1
@@ -70,7 +70,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 0
+    m_EnableMouseInput: 1
     m_EnableSliderZoom: 0
     m_UniformScale: 1
     m_UpDirection: 1
@@ -120,10 +120,10 @@ MonoBehaviour:
     y: 0
     width: 1059
     height: 635
-  m_MinSize: {x: 306, y: 442}
-  m_MaxSize: {x: 8006, y: 8042}
+  m_MinSize: {x: 302, y: 421}
+  m_MaxSize: {x: 8002, y: 8021}
   vertical: 1
-  controlID: 4648
+  controlID: 9635
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -144,10 +144,10 @@ MonoBehaviour:
     y: 0
     width: 1059
     height: 332
-  m_MinSize: {x: 306, y: 221}
-  m_MaxSize: {x: 8006, y: 4021}
+  m_MinSize: {x: 302, y: 221}
+  m_MaxSize: {x: 8002, y: 4021}
   vertical: 0
-  controlID: 4649
+  controlID: 9636
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -201,9 +201,9 @@ MonoBehaviour:
     height: 311
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 3ea7ffff
-    m_LastClickedID: -22722
-    m_ExpandedIDs: f6a6ffff10a7ffff3ca7ffff3ea7ffff7cb0ffff7eb0ffff8eb2ffff40b3fffff8b3ffff1cb4ffff3cb4ffffc4b6fffff0b6fffff2b6ffff8cb9ffff24bafffffcbaffff1cbbffff46bdffffdebdffffb6beffffd6beffff56c0fffff4c0ffffccc1ffffecc1ffff72c3ffff0ec4ffffe6c4ffff06c5ffff92cdffff9ccdffff3cceffff74d1ffff0cd2ffffecd2fffff0d2ffff4addffff46e6ffff72e6ffff74e6ffffa6efffff62f2ffff64f2ffff56f6ffff14f7fffff6f7fffffcf7ffffe2fbffff00000000423000009c310000845a00002c5e0000425e0000
+    m_SelectedIDs: 
+    m_LastClickedID: 0
+    m_ExpandedIDs: 627afffffa7affffb27bffffd67bfffff67bffff8c8effff6a91ffff2092ffffd892fffffc92ffff1c93ffff3a97fffff297ffffaa98ffffce98ffffee98fffff6a6ffff10a7ffff3ca7ffff3ea7ffff7cb0ffff7eb0ffff8eb2ffff40b3fffff8b3ffff1cb4ffff3cb4ffffc4b6fffff0b6fffff2b6ffff8cb9ffff24bafffffcbaffff1cbbffff46bdffffdebdffffb6beffffd6beffff56c0fffff4c0ffffccc1ffffecc1ffff72c3ffff0ec4ffffe6c4ffff06c5ffff92cdffff9ccdffff3cceffff74d1ffff0cd2ffffecd2fffff0d2ffff4addffff46e6ffff72e6ffff74e6ffffa6efffff62f2ffff64f2ffff56f6ffff14f7fffff6f7fffffcf7ffffe2fbffff00000000423000009c310000845a00002c5e0000425e0000206a0000386a000082710000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -443,8 +443,8 @@ MonoBehaviour:
     y: 332
     width: 1059
     height: 303
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 2}
   m_Panes:
   - {fileID: 13}
@@ -497,7 +497,7 @@ MonoBehaviour:
   m_LastProjectPath: F:\Development\Unity\Power Finger
   m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 75}
+    scrollPos: {x: 0, y: 56}
     m_SelectedIDs: f4260000
     m_LastClickedID: 9972
     m_ExpandedIDs: 00000000c02600006c2700008027000000ca9a3bffffff7f
@@ -553,9 +553,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 3ea7ffff
-    m_LastClickedInstanceID: -22722
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: 74220000b4500000002e0000ca2f0000ca210000d42100006422000062220000862300003ebdffff3cedffff782200003823000000000000ee210000c8dfffff6ea7ffffea220000922d0000d0f0ffff02220000c2220000e0220000d8210000ea21000024230000503c00003e26000078dfffff
     m_RenameOverlay:
       m_UserAcceptedRename: 0

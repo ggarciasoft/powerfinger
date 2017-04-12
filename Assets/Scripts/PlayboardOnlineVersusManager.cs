@@ -6,7 +6,7 @@ using Assets.Scripts;
 using UnityEngine.SceneManagement;
 using Assets.Scripts.OnlineServices;
 using UnityEngine.Events;
-
+//TODO: agregar logica en el resume, cuando el juego este corriendo
 public class PlayboardOnlineVersusManager : CommonManager
 {
     #region Properties
@@ -245,8 +245,7 @@ public class PlayboardOnlineVersusManager : CommonManager
     {
         if (_timerCount <= 0)
         {
-            CancelInvoke("UpdateGame");
-            BlockImageSetActive(true);
+            GameFinish();
             return;
         }
 
@@ -274,6 +273,13 @@ public class PlayboardOnlineVersusManager : CommonManager
 
         _timerCount -= 0.01f;
         SetTimer();
+    }
+
+    private void GameFinish()
+    {
+        CancelInvoke("UpdateGame");
+        _gameInitiate = false;
+        MessageBox("GAME FINISH!!!", onClose: () => SceneManager.LoadScene("GameFinish"));
     }
 
     private void LeaveRoom()
@@ -393,6 +399,16 @@ public class PlayboardOnlineVersusManager : CommonManager
             TxtScoreP2.text = _currentOtherScore.ToString();
         else
             TxtScoreP1.text = _currentOtherScore.ToString();
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if(hasFocus && _gameInitiate)
+        {
+            CancelInvoke("UpdateGame");
+            _gameInitiate = false;
+            MessageBox("You Leave the room!", onClose: () => SceneManager.LoadScene("GameFinish"));
+        }
     }
     #endregion
 
