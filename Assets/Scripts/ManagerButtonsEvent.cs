@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
 using Assets.Scripts;
-using ExitGames.Client.Photon.LoadBalancing;
 
 public class ManagerButtonsEvent : CommonManager
 {

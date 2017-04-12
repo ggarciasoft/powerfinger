@@ -41,7 +41,7 @@ namespace Assets.Scripts.OnlineServices
 
         public bool IsLogged()
         {
-            return Social.localUser.authenticated;// PlayGamesPlatform.Instance.localUser.authenticated;
+            return false;// PlayGamesPlatform.Instance.localUser.authenticated;
         }
 
         /// <summary>
@@ -51,7 +51,14 @@ namespace Assets.Scripts.OnlineServices
         public void SignIn(Action<bool> callBack)
         {
             //PlayGamesPlatform.Instance.Authenticate(callBack, false);
-            Social.Active.localUser.Authenticate(callBack);
+            Social.Active.localUser.Authenticate((success) =>
+            {
+                if (success)
+                {
+                    //PlayFabClientAPI
+                }
+                callBack(success);
+            });
             /*
             Action<bool> innerCallBack = (val) =>
             {
