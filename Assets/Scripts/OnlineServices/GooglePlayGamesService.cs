@@ -140,7 +140,8 @@ namespace Assets.Scripts.OnlineServices
                     OnRoomFullAction(new RoomFullData
                     {
                         FirstPlayerNickName = participants[1].DisplayName,
-                        SecondPlayerNickName = participants[0].DisplayName
+                        SecondPlayerNickName = participants[0].DisplayName,
+                        LocalUserIsFirstPlayer = PlayGamesPlatform.Instance.localUser.userName == participants[1].DisplayName
                     });
             }
 

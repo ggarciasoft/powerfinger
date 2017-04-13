@@ -1,7 +1,6 @@
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Assembly-CSharp.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Assembly-CSharp.pdb
 F:\Development\Unity\Power Finger\Temp\bin\Debug\nunit.framework.dll
-F:\Development\Unity\Power Finger\Temp\bin\Debug\Photon3Unity3D.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEditor.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.Analytics.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.dll
@@ -10,7 +9,6 @@ F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.Networking.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.TestRunner.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.UI.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.VR.dll
-F:\Development\Unity\Power Finger\Temp\bin\Debug\websocket-sharp.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Mono.Cecil.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Unity.SerializationLogic.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Unity.DataContract.dll
@@ -29,7 +27,6 @@ F:\Development\Unity\Power Finger\Temp\bin\Debug\nunit.framework.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.Analytics.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.HoloLens.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.VR.xml
-F:\Development\Unity\Power Finger\Temp\bin\Debug\Photon3Unity3D.xml
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp.dll
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp.pdb

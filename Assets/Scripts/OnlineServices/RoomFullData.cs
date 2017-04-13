@@ -7,6 +7,7 @@ namespace Assets.Scripts.OnlineServices
 {
     public class RoomFullData
     {
+        public bool LocalUserIsFirstPlayer { get; set; }
         public string FirstPlayerNickName { get; set; }
         public string SecondPlayerNickName { get; set; }
     }

@@ -25,15 +25,14 @@ public class ManagerButtonsEvent : CommonManager
 
     #region Main Menu Buttons
 
-    public void ClickCreateGame()
+    public void ClickNewGame()
     {
         "pnlMainMenu".Hide();
-        "pnlCreateGame".Show();
+        "pnlNewGame".Show();
     }
 
     public void ClickJoinGame()
     {
-        IsFirstPlayer = false;
         UpdateServerService = false;
         var join = OnlineService.CreateRoom();
 
@@ -85,11 +84,11 @@ public class ManagerButtonsEvent : CommonManager
     }
     #endregion
 
-    #region Create Game
+    #region New Game
 
-    public void ClickMainMenuBackCreateGame()
+    public void ClickMainMenuBackNewGame()
     {
-        "pnlCreateGame".Hide();
+        "pnlNewGame".Hide();
         "pnlMainMenu".Show();
     }
 
@@ -100,7 +99,6 @@ public class ManagerButtonsEvent : CommonManager
 
     public void ClickCreate()
     {
-        IsFirstPlayer = true;
         var join = OnlineService.CreateRoom();
 
         if (!join) return;

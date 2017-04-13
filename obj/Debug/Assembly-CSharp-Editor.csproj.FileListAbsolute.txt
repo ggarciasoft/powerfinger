@@ -4,7 +4,6 @@ F:\Development\Unity\Power Finger\Temp\bin\Debug\Google.IOSResolver.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Google.JarResolver.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Google.VersionHandler.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\nunit.framework.dll
-F:\Development\Unity\Power Finger\Temp\bin\Debug\Photon3Unity3D.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEditor.Advertisements.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEditor.Analytics.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEditor.Android.Extensions.dll
@@ -25,7 +24,6 @@ F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.Networking.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.TestRunner.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.UI.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.VR.dll
-F:\Development\Unity\Power Finger\Temp\bin\Debug\websocket-sharp.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Mono.Cecil.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Unity.SerializationLogic.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Unity.DataContract.dll
@@ -55,8 +53,9 @@ F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.HoloLens.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEditor.Purchasing.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEditor.VR.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.VR.xml
-F:\Development\Unity\Power Finger\Temp\bin\Debug\Photon3Unity3D.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEditor.iOS.Extensions.Xcode.xml
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-Editor.csprojResolveAssemblyReference.cache
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-Editor.dll
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-Editor.pdb
+F:\Development\Unity\Power Finger\Temp\bin\Debug\SyntaxTree.VisualStudio.Unity.Bridge.dll
+F:\Development\Unity\Power Finger\Temp\bin\Debug\SyntaxTree.VisualStudio.Unity.Messaging.dll

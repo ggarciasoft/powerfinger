@@ -20,6 +20,8 @@ public class PlayboardOnlineVersusManager : CommonManager
     private bool _gameInitiate, _tryLeavingRoom, _waitingStart;
     private short _currentSelfScore, _currentOtherScore;
 
+    private bool _isFirstPlayer;
+
     private GameObject Playboard
     {
         get
@@ -168,6 +170,7 @@ public class PlayboardOnlineVersusManager : CommonManager
     {
         _gameInitiate = true;
         _waitingStart = false;
+        _isFirstPlayer = data.LocalUserIsFirstPlayer;
         TxtNameP1.text = data.FirstPlayerNickName;
         TxtNameP2.text = data.SecondPlayerNickName;
         InvokeRepeating("HideBlockImage", 0, 0.01f);
@@ -387,7 +390,7 @@ public class PlayboardOnlineVersusManager : CommonManager
 
     private void SetSelfScore()
     {
-        if (IsFirstPlayer)
+        if (_isFirstPlayer)
             TxtScoreP1.text = _currentSelfScore.ToString();
         else
             TxtScoreP2.text = _currentSelfScore.ToString();
@@ -395,7 +398,7 @@ public class PlayboardOnlineVersusManager : CommonManager
 
     private void SetOtherScore()
     {
-        if (IsFirstPlayer)
+        if (_isFirstPlayer)
             TxtScoreP2.text = _currentOtherScore.ToString();
         else
             TxtScoreP1.text = _currentOtherScore.ToString();
