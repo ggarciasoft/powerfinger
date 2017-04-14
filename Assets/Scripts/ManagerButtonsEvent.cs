@@ -34,7 +34,7 @@ public class ManagerButtonsEvent : CommonManager
     public void ClickJoinGame()
     {
         UpdateServerService = false;
-        var join = OnlineService.CreateRoom();
+        var join = OnlineService.JoinRoom();
 
         if (!join) return;
 
@@ -97,7 +97,27 @@ public class ManagerButtonsEvent : CommonManager
         GameObject.Find("txtTime").GetComponent<Text>().text = value.ToString();
     }
 
-    public void ClickCreate()
+    public void ClickInvite()
+    {
+        var join = OnlineService.InviteRoom();
+
+        if (!join) return;
+
+        foreach (var item in GameObject.FindGameObjectsWithTag("FadeWhite"))
+        {
+            var btn = item.GetComponent<Button>();
+            btn.interactable = false;
+        }
+
+        ActionWhenBlockImageToggle = () =>
+        {
+            SceneManager.LoadScene("PlayboardOnlineVersus");
+        };
+
+        InvokeRepeating("ShowBlockImage", 0, 0.01f);
+    }
+
+    public void ClickAutomatch()
     {
         var join = OnlineService.CreateRoom();
 

@@ -327,7 +327,6 @@
      <Compile Include="Assets\Scripts\OnlineServices\IOnlineService.cs" />
      <Compile Include="Assets\Scripts\OnlineServices\MainOnlineService.cs" />
      <Compile Include="Assets\Scripts\OnlineServices\PointExplodeData.cs" />
-     <Compile Include="Assets\Scripts\OnlineServices\PowerFingerBalancingClient.cs" />
      <Compile Include="Assets\Scripts\OnlineServices\RoomFullData.cs" />
      <Compile Include="Assets\Scripts\PlayboardLocalVersusManager.cs" />
      <Compile Include="Assets\Scripts\PlayboardOnlineVersusManager.cs" />

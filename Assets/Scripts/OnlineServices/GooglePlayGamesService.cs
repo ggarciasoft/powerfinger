@@ -96,7 +96,13 @@ namespace Assets.Scripts.OnlineServices
             _listenerInstance.OnOponentLeftAction = action;
         }
 
-        private class RealTimeMultiplayerListenerImplementation : RealTimeMultiplayerListener
+        public bool InviteRoom()
+        {
+            PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen(1, 1, 0, _listenerInstance);
+            return true;
+        }
+
+        public class RealTimeMultiplayerListenerImplementation : RealTimeMultiplayerListener
         {
             public Action<RoomFullData> OnRoomFullAction { get; set; }
             public Action<PointExplodeData> OnPointExplodeAction { get; set; }

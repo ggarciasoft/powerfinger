@@ -46,7 +46,7 @@ namespace Assets.Scripts.OnlineServices
         {
             return Social.localUser.authenticated && PlayFabClientAPI.IsClientLoggedIn();// PlayGamesPlatform.Instance.localUser.authenticated;
         }
-        
+
         public string ReviewConfiguration()
         {
             StringBuilder sb = new StringBuilder();
@@ -62,13 +62,15 @@ namespace Assets.Scripts.OnlineServices
         public void SignIn(Action<bool> callBack)
         {
             //PlayGamesPlatform.Instance.Authenticate(callBack, false);
+            Debug.Log("Attempting To Login");
             Social.Active.localUser.Authenticate((success) =>
             {
+            Debug.Log("Authenticate Finish, result: " + success);
                 if (success)
                 {
                     PlayGamesPlatform.Instance.GetServerAuthCode((code, authToken) =>
                     {
-                        Debug.LogError("Code Return ServerAuthCode: " + code);
+                        Debug.Log("Code Return ServerAuthCode: " + code);
                         PlayFabClientAPI.LoginWithGoogleAccount(new LoginWithGoogleAccountRequest()
                         {
                             TitleId = PlayFabSettings.TitleId,

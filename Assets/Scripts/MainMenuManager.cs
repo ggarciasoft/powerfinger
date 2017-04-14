@@ -62,7 +62,7 @@ public class MainMenuManager : CommonManager
     private void Start()
     {
         "pnlSettings".Hide();
-        "pnlCreateGame".Hide();
+        "pnlNewGame".Hide();
 
         _camHalfHeight = Camera.main.orthographicSize;
         _camHalfWidth = Camera.main.aspect * _camHalfHeight;
@@ -146,19 +146,19 @@ public class MainMenuManager : CommonManager
 
     private void Update()
     {
-        GameObject.Find("btnJoinGame").GetComponent<Button>().interactable =
-        GameObject.Find("btnCreateGame").GetComponent<Button>().interactable = false;
+        //GameObject.Find("btnJoinGame").GetComponent<Button>().interactable =
+        //GameObject.Find("btnNewGame").GetComponent<Button>().interactable = false;
 
-        if (!UpdateServerService) return;
+        //if (!UpdateServerService) return;
 
-        var connectionStatus = OnlineService.GetConnectionStatus();
+        //var connectionStatus = OnlineService.GetConnectionStatus();
 
-        txtServerStatus.text = connectionStatus.ToString();
+        //txtServerStatus.text = connectionStatus.ToString();
 
-        if (connectionStatus == OnlineStatus.Connected)
-            GameObject.Find("btnJoinGame").GetComponent<Button>().interactable =
-            GameObject.Find("btnCreateGame").GetComponent<Button>().interactable = true;
+        //if (connectionStatus == OnlineStatus.Connected)
+        //    GameObject.Find("btnJoinGame").GetComponent<Button>().interactable =
+        //    GameObject.Find("btnNewGame").GetComponent<Button>().interactable = true;
 
-        OnlineService.Sync();
+        //OnlineService.Sync();
     }
 }

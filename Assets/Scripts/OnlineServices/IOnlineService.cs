@@ -14,6 +14,7 @@ namespace Assets.Scripts.OnlineServices
         void Initialize();
         OnlineStatus GetConnectionStatus();
         bool CreateRoom(string roomId = null);
+        bool InviteRoom();
         bool JoinRoom(string roomId = null);
         bool LeaveRoom();
         bool SendPointExplode(PointExplodeData data);
