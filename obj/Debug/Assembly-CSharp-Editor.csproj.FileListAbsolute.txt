@@ -57,5 +57,3 @@ F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEditor.iOS.Extensions.Xcod
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-Editor.csprojResolveAssemblyReference.cache
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-Editor.dll
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-Editor.pdb
-F:\Development\Unity\Power Finger\Temp\bin\Debug\SyntaxTree.VisualStudio.Unity.Bridge.dll
-F:\Development\Unity\Power Finger\Temp\bin\Debug\SyntaxTree.VisualStudio.Unity.Messaging.dll

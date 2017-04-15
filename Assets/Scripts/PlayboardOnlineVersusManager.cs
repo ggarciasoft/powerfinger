@@ -5,8 +5,6 @@ using UnityEngine.UI;
 using Assets.Scripts;
 using UnityEngine.SceneManagement;
 using Assets.Scripts.OnlineServices;
-using UnityEngine.Events;
-//TODO: agregar logica en el resume, cuando el juego este corriendo
 public class PlayboardOnlineVersusManager : CommonManager
 {
     #region Properties
@@ -164,6 +162,11 @@ public class PlayboardOnlineVersusManager : CommonManager
         };
 
         InvokeRepeating("ShowWaitingForPlayer", 0, 0.01f);
+
+        if(IsJoining)
+        {
+            OnlineService.JoinRoom();
+        }
     }
 
     private void OnRoomFull(RoomFullData data)
@@ -306,6 +309,7 @@ public class PlayboardOnlineVersusManager : CommonManager
             OnlineService.LeaveRoom();
             BackFromGame = true;
             SceneManager.LoadScene("MainMenu");
+            return;
         }
 
         if (UpdateServerService)

@@ -47,7 +47,6 @@ namespace Assets.Scripts
             }
         }
 
-
         protected IOnlineService OnlineService
         {
             get
@@ -60,6 +59,7 @@ namespace Assets.Scripts
         protected static bool UpdateServerService { get; set; }
         protected static bool BackFromGame { get; set; }
         protected static bool InitiateGame { get; set; }
+        protected static bool IsJoining { get; set; }
         #endregion
 
         #region Methods

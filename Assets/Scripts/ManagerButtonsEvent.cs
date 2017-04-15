@@ -29,27 +29,36 @@ public class ManagerButtonsEvent : CommonManager
     {
         "pnlMainMenu".Hide();
         "pnlNewGame".Show();
+        IsJoining = false;
+        OnlineService.SetOnShowWaitingRoomEvent(null);
     }
 
     public void ClickJoinGame()
     {
         UpdateServerService = false;
-        var join = OnlineService.JoinRoom();
+        IsJoining = true;
+        OnlineService.SetOnShowWaitingRoomEvent(null);
+        ShowWaitingRoom();
+    }
 
-        if (!join) return;
-
-        foreach (var item in GameObject.FindGameObjectsWithTag("FadeWhite"))
-        {
-            var btn = item.GetComponent<Button>();
-            btn.interactable = false;
-        }
-
+    private void ShowWaitingRoom()
+    {
+        SetEnableFadeWhiteButtons(false);
         ActionWhenBlockImageToggle = () =>
         {
             SceneManager.LoadScene("PlayboardOnlineVersus");
         };
 
         InvokeRepeating("ShowBlockImage", 0, 0.01f);
+    }
+
+    private void SetEnableFadeWhiteButtons(bool enable = true)
+    {
+        foreach (var item in GameObject.FindGameObjectsWithTag("FadeWhite"))
+        {
+            var btn = item.GetComponent<Button>();
+            btn.interactable = enable;
+        }
     }
 
     public void ClickMainMenuSettings()
@@ -99,22 +108,12 @@ public class ManagerButtonsEvent : CommonManager
 
     public void ClickInvite()
     {
+        SetEnableFadeWhiteButtons(false);
         var join = OnlineService.InviteRoom();
 
         if (!join) return;
-
-        foreach (var item in GameObject.FindGameObjectsWithTag("FadeWhite"))
-        {
-            var btn = item.GetComponent<Button>();
-            btn.interactable = false;
-        }
-
-        ActionWhenBlockImageToggle = () =>
-        {
-            SceneManager.LoadScene("PlayboardOnlineVersus");
-        };
-
-        InvokeRepeating("ShowBlockImage", 0, 0.01f);
+        OnlineService.SetOnShowWaitingRoomEvent(ShowWaitingRoom);
+        Invoke("SetEnableFadeWhiteButtons", 1f);
     }
 
     public void ClickAutomatch()
@@ -122,19 +121,7 @@ public class ManagerButtonsEvent : CommonManager
         var join = OnlineService.CreateRoom();
 
         if (!join) return;
-
-        foreach (var item in GameObject.FindGameObjectsWithTag("FadeWhite"))
-        {
-            var btn = item.GetComponent<Button>();
-            btn.interactable = false;
-        }
-
-        ActionWhenBlockImageToggle = () =>
-        {
-            SceneManager.LoadScene("PlayboardOnlineVersus");
-        };
-
-        InvokeRepeating("ShowBlockImage", 0, 0.01f);
+        ShowWaitingRoom();
     }
 
     #endregion

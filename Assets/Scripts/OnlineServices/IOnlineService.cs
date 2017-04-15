@@ -10,6 +10,8 @@ namespace Assets.Scripts.OnlineServices
         void SetOnRoomFullEvent(Action<RoomFullData> action);
         void SetOnPointExplodeEvent(Action<PointExplodeData> action);
         void SetOnOponentLeaveRoomEvent(Action action);
+        void SetOnOponentDeclinedEvent(Action action);
+        void SetOnShowWaitingRoomEvent(Action action);
 
         void Initialize();
         OnlineStatus GetConnectionStatus();
@@ -19,5 +21,6 @@ namespace Assets.Scripts.OnlineServices
         bool LeaveRoom();
         bool SendPointExplode(PointExplodeData data);
         bool Sync();
+        bool IsRoomConected();
     }
 }

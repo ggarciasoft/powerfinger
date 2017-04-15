@@ -60,6 +60,12 @@ namespace Assets.Scripts.OnlineServices
             return true;
         }
 
+        public bool InviteRoom()
+        {
+            PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen(1, 1, 0, _listenerInstance);
+            return true;
+        }
+
         public bool LeaveRoom()
         {
             RealTime.LeaveRoom();
@@ -96,17 +102,29 @@ namespace Assets.Scripts.OnlineServices
             _listenerInstance.OnOponentLeftAction = action;
         }
 
-        public bool InviteRoom()
+        public bool IsRoomConected()
         {
-            PlayGamesPlatform.Instance.RealTime.CreateWithInvitationScreen(1, 1, 0, _listenerInstance);
-            return true;
+            return RealTime.IsRoomConnected();
         }
 
-        public class RealTimeMultiplayerListenerImplementation : RealTimeMultiplayerListener
+        public void SetOnOponentDeclinedEvent(Action action)
+        {
+            _listenerInstance.OnOponentDeclinedAction = action;
+        }
+
+        public void SetOnShowWaitingRoomEvent(Action action)
+        {
+            _listenerInstance.OnShowWaitingRoomAction = action;
+        }
+
+        private class RealTimeMultiplayerListenerImplementation : RealTimeMultiplayerListener
         {
             public Action<RoomFullData> OnRoomFullAction { get; set; }
             public Action<PointExplodeData> OnPointExplodeAction { get; set; }
             public Action OnOponentLeftAction { get; set; }
+            public Action OnOponentDeclinedAction { get; set; }
+            public Action OnShowWaitingRoomAction { get; set; }
+            public bool IsInWaitingRoom { get; set; }
 
             public RealTimeMultiplayerListenerImplementation()
             {
@@ -119,6 +137,8 @@ namespace Assets.Scripts.OnlineServices
 
             public void OnParticipantLeft(Participant participant)
             {
+                if (IsInWaitingRoom && OnOponentDeclinedAction != null)
+                    OnOponentDeclinedAction();
             }
 
             public void OnPeersConnected(string[] participantIds)
@@ -127,32 +147,43 @@ namespace Assets.Scripts.OnlineServices
 
             public void OnPeersDisconnected(string[] participantIds)
             {
-                OnOponentLeftAction();
+                if (OnOponentLeftAction != null)
+                    OnOponentLeftAction();
             }
 
             public void OnRealTimeMessageReceived(bool isReliable, string senderId, byte[] data)
             {
-                OnPointExplodeAction(new PointExplodeData
-                {
-                    SumScore = data[0],
-                    PointId = BitConverter.ToInt16(data, 1)
-                });
+                if (OnPointExplodeAction != null)
+                    OnPointExplodeAction(new PointExplodeData
+                    {
+                        SumScore = data[0],
+                        PointId = BitConverter.ToInt16(data, 1)
+                    });
             }
 
             public void OnRoomConnected(bool success)
             {
                 var participants = PlayGamesPlatform.Instance.RealTime.GetConnectedParticipants();
                 if (participants.Count == 2)
-                    OnRoomFullAction(new RoomFullData
-                    {
-                        FirstPlayerNickName = participants[1].DisplayName,
-                        SecondPlayerNickName = participants[0].DisplayName,
-                        LocalUserIsFirstPlayer = PlayGamesPlatform.Instance.localUser.userName == participants[1].DisplayName
-                    });
+                {
+                    if (OnRoomFullAction != null)
+                        OnRoomFullAction(new RoomFullData
+                        {
+                            FirstPlayerNickName = participants[1].DisplayName,
+                            SecondPlayerNickName = participants[0].DisplayName,
+                            LocalUserIsFirstPlayer = PlayGamesPlatform.Instance.localUser.userName == participants[1].DisplayName
+                        });
+                    IsInWaitingRoom = false;
+                }
             }
 
             public void OnRoomSetupProgress(float percent)
             {
+                if (!IsInWaitingRoom && OnShowWaitingRoomAction != null)
+                {
+                    OnShowWaitingRoomAction();
+                    IsInWaitingRoom = true;
+                }
             }
         }
     }
