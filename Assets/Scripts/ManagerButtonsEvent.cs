@@ -23,6 +23,11 @@ public class ManagerButtonsEvent : CommonManager
         SceneManager.LoadScene(index);
     }
 
+    private void OnlineServiceMessage(string msg, bool isError)
+    {
+        MessageBox(msg);
+    }
+
     #region Main Menu Buttons
 
     public void ClickNewGame()
@@ -31,6 +36,7 @@ public class ManagerButtonsEvent : CommonManager
         "pnlNewGame".Show();
         IsJoining = false;
         OnlineService.SetOnShowWaitingRoomEvent(null);
+        OnlineService.SetMessageEvent(OnlineServiceMessage);
     }
 
     public void ClickJoinGame()
@@ -38,6 +44,7 @@ public class ManagerButtonsEvent : CommonManager
         UpdateServerService = false;
         IsJoining = true;
         OnlineService.SetOnShowWaitingRoomEvent(null);
+        OnlineService.SetMessageEvent(OnlineServiceMessage);
         ShowWaitingRoom();
     }
 

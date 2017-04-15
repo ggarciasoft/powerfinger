@@ -114,7 +114,15 @@ public class PlayboardOnlineVersusManager : CommonManager
     #endregion
 
     #region Methods
-    void Start()
+    private void OnlineServiceMessage(string msg, bool isError)
+    {
+        if (isError)
+            MessageBox(msg, onClose: BackToMainMenu);
+        else
+            MessageBox(msg);
+    }
+
+    private void Start()
     {
         UpdateServerService = true;
         _waitingStart = true;
@@ -122,6 +130,8 @@ public class PlayboardOnlineVersusManager : CommonManager
         OnlineService.SetOnRoomFullEvent(OnRoomFull);
         OnlineService.SetOnPointExplodeEvent(PointExplodeFromOponent);
         OnlineService.SetOnOponentLeaveRoomEvent(OponentLeaveRoom);
+        OnlineService.SetOnOponentDeclinedEvent(OponentDeclinedInvitation);
+        OnlineService.SetMessageEvent(OnlineServiceMessage);
 
         Initialize();
 
@@ -163,7 +173,7 @@ public class PlayboardOnlineVersusManager : CommonManager
 
         InvokeRepeating("ShowWaitingForPlayer", 0, 0.01f);
 
-        if(IsJoining)
+        if (IsJoining)
         {
             OnlineService.JoinRoom();
         }
@@ -171,11 +181,16 @@ public class PlayboardOnlineVersusManager : CommonManager
 
     private void OnRoomFull(RoomFullData data)
     {
-        _gameInitiate = true;
-        _waitingStart = false;
         _isFirstPlayer = data.LocalUserIsFirstPlayer;
         TxtNameP1.text = data.FirstPlayerNickName;
         TxtNameP2.text = data.SecondPlayerNickName;
+        LblWaitingForPlayer.text = "CONFIGURING GAME...";
+    }
+
+    private void OnStartGame()
+    {
+        _gameInitiate = true;
+        _waitingStart = false;
         InvokeRepeating("HideBlockImage", 0, 0.01f);
     }
 
@@ -288,7 +303,7 @@ public class PlayboardOnlineVersusManager : CommonManager
         MessageBox("GAME FINISH!!!", onClose: () => SceneManager.LoadScene("GameFinish"));
     }
 
-    private void LeaveRoom()
+    private void SelfLeaveRoom()
     {
         OnlineService.LeaveRoom();
         BackFromGame = true;
@@ -302,13 +317,26 @@ public class PlayboardOnlineVersusManager : CommonManager
         MessageBox("Your oponent leave the room, you win!", onClose: () => SceneManager.LoadScene("GameFinish"));
     }
 
+    private void OponentDeclinedInvitation()
+    {
+        OnlineService.LeaveRoom();
+        BackFromGame = true;
+        _gameInitiate = false;
+        MessageBox("Your oponent declined, your invitation!", onClose: () => SceneManager.LoadScene("MainMenu"));
+    }
+
+    private void BackToMainMenu()
+    {
+        OnlineService.LeaveRoom();
+        BackFromGame = true;
+        SceneManager.LoadScene("MainMenu");
+    }
+
     private void Update()
     {
         if (_waitingStart && Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
         {
-            OnlineService.LeaveRoom();
-            BackFromGame = true;
-            SceneManager.LoadScene("MainMenu");
+            BackToMainMenu();
             return;
         }
 
@@ -320,7 +348,7 @@ public class PlayboardOnlineVersusManager : CommonManager
         if (Input.GetKeyDown(KeyCode.Escape) && !_tryLeavingRoom)
         {
             _tryLeavingRoom = true;
-            MessageBox("If you leave the game, you will lose, are you sure?", LeaveRoom, () => _tryLeavingRoom = false);
+            MessageBox("If you leave the game, you will lose, are you sure?", SelfLeaveRoom, () => _tryLeavingRoom = false);
         }
 
         GameObject objectTouched = null;
@@ -410,7 +438,7 @@ public class PlayboardOnlineVersusManager : CommonManager
 
     private void OnApplicationFocus(bool hasFocus)
     {
-        if(hasFocus && _gameInitiate)
+        if (hasFocus && _gameInitiate)
         {
             CancelInvoke("UpdateGame");
             _gameInitiate = false;

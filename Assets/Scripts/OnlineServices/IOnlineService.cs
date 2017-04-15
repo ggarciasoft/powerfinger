@@ -12,6 +12,8 @@ namespace Assets.Scripts.OnlineServices
         void SetOnOponentLeaveRoomEvent(Action action);
         void SetOnOponentDeclinedEvent(Action action);
         void SetOnShowWaitingRoomEvent(Action action);
+        void SetMessageEvent(Action<string, bool> action);
+        void SetOnStartGameEvent(Action action);
 
         void Initialize();
         OnlineStatus GetConnectionStatus();

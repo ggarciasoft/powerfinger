@@ -65,7 +65,7 @@ namespace Assets.Scripts.OnlineServices
             Debug.Log("Attempting To Login");
             Social.Active.localUser.Authenticate((success) =>
             {
-            Debug.Log("Authenticate Finish, result: " + success);
+                Debug.Log("Authenticate Finish, result: " + success);
                 if (success)
                 {
                     PlayGamesPlatform.Instance.GetServerAuthCode((code, authToken) =>
@@ -79,14 +79,16 @@ namespace Assets.Scripts.OnlineServices
                         }, (successLoginResult) =>
                         {
                             Debug.LogFormat("Login With Google Success: ", successLoginResult.PlayFabId);
-                            callBack(success);
+                            callBack(true);
                         }, (errorResult) =>
                         {
                             Debug.Log(errorResult.GenerateErrorReport());
-                            callBack(success);
+                            callBack(false);
                         });
                     });
                 }
+                else
+                    callBack(false);
             });
             /*
             Action<bool> innerCallBack = (val) =>
