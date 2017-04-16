@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using System;
 using Assets.Scripts;
 using Assets.Scripts.OnlineServices;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class ManagerButtonsEvent : CommonManager
 {
@@ -137,6 +139,5 @@ public class ManagerButtonsEvent : CommonManager
     {
         MessageBox(AuthenticationService.Instance.ReviewConfiguration());
     }
-
     #endregion
 }

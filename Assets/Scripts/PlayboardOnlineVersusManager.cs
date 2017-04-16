@@ -5,13 +5,13 @@ using UnityEngine.UI;
 using Assets.Scripts;
 using UnityEngine.SceneManagement;
 using Assets.Scripts.OnlineServices;
-public class PlayboardOnlineVersusManager : CommonManager
+public partial class PlayboardOnlineVersusManager : CommonManager
 {
     #region Properties
     public List<GameObject> lstPrefabPoints;
 
     private Dictionary<GamePoint.GamePointType, GameObject> _listGamePointsType;
-    private List<GamePoint> _listGamePointsGenerated;
+    private GamePoint[] _listGamePointsGenerated;
     private GameObject _playboard;
     private Text _txtTimer, _txtScoreP1, _txtScoreP2, _txtNameP1, _txtNameP2, _lblWaitingForPlayer;
     private float _timerCount = 30f;
@@ -124,6 +124,8 @@ public class PlayboardOnlineVersusManager : CommonManager
 
     private void Start()
     {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
         UpdateServerService = true;
         _waitingStart = true;
 
@@ -132,6 +134,9 @@ public class PlayboardOnlineVersusManager : CommonManager
         OnlineService.SetOnOponentLeaveRoomEvent(OponentLeaveRoom);
         OnlineService.SetOnOponentDeclinedEvent(OponentDeclinedInvitation);
         OnlineService.SetMessageEvent(OnlineServiceMessage);
+        OnlineService.SetOnStartGameEvent(OnStartGame);
+        OnlineService.SetGeneratePointFunc(GenerateGamePoints);
+        OnlineService.SetGeneratedPointAction(SetGamePoints);
 
         Initialize();
 
@@ -151,20 +156,6 @@ public class PlayboardOnlineVersusManager : CommonManager
             lstPrefabPoints.Add(GameObject.Find("CountDownPoint" + i));
         }
 
-        var randomPointCount = Random.Range(_timerCount, _timerCount * 2);
-
-        for (short i = 0; i < randomPointCount; i++)
-        {
-            var randomType = Random.Range(0, 100) <= 10 ? GamePoint.GamePointType.SpecialPoint : GamePoint.GamePointType.NormalPoint;
-
-            _listGamePointsGenerated.Add(new GamePoint
-            {
-                Id = i,
-                Type = randomType,
-                Time = i
-            });
-        }
-
         ActionWhenBlockImageToggle = () =>
         {
             BlockImageSetActive(true);
@@ -177,6 +168,31 @@ public class PlayboardOnlineVersusManager : CommonManager
         {
             OnlineService.JoinRoom();
         }
+    }
+
+    private GamePoint[] GenerateGamePoints()
+    {
+        var lst = new List<GamePoint>();
+        var randomPointCount = Random.Range(_timerCount, _timerCount * 3);
+
+        for (short i = 0; i < randomPointCount; i++)
+        {
+            var randomType = Random.Range(0, 100) <= 10 ? GamePoint.GamePointType.SpecialPoint : GamePoint.GamePointType.NormalPoint;
+
+            lst.Add(new GamePoint
+            {
+                Id = i,
+                Type = randomType,
+                Time = Random.Range(1, _timerCount)
+            });
+        }
+        _listGamePointsGenerated = lst.ToArray();
+        return _listGamePointsGenerated;
+    }
+
+    private void SetGamePoints(GamePoint[] lst)
+    {
+        _listGamePointsGenerated = lst;
     }
 
     private void OnRoomFull(RoomFullData data)
@@ -203,7 +219,6 @@ public class PlayboardOnlineVersusManager : CommonManager
         TxtNameP1 = GameObject.Find("txtNameP1").GetComponent<Text>();
         TxtNameP2 = GameObject.Find("txtNameP2").GetComponent<Text>();
         _listGamePointsType = new Dictionary<GamePoint.GamePointType, GameObject>();
-        _listGamePointsGenerated = new List<GamePoint>();
     }
 
     private void ShowWaitingForPlayer()
@@ -446,20 +461,4 @@ public class PlayboardOnlineVersusManager : CommonManager
         }
     }
     #endregion
-
-    public class GamePoint
-    {
-        public short Id { get; set; }
-        public GamePointType Type { get; set; }
-        public float Time { get; set; }
-        public bool Instatiated { get; set; }
-
-        public enum GamePointType
-        {
-            NormalPoint,
-            SpecialPoint,
-            PointExplode,
-            PointExplodeSpread
-        }
-    }
 }

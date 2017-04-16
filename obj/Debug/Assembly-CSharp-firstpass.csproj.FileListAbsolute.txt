@@ -26,6 +26,6 @@ F:\Development\Unity\Power Finger\Temp\bin\Debug\nunit.framework.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.Analytics.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.HoloLens.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.VR.xml
-F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-firstpass.csprojResolveAssemblyReference.cache
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-firstpass.dll
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-firstpass.pdb
+F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-firstpass.csprojResolveAssemblyReference.cache

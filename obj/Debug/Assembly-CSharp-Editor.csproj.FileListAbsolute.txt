@@ -1,3 +1,4 @@
+F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-Editor.csprojResolveAssemblyReference.cache
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Assembly-CSharp-Editor.dll
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Assembly-CSharp-Editor.pdb
 F:\Development\Unity\Power Finger\Temp\bin\Debug\Google.IOSResolver.dll
@@ -54,6 +55,5 @@ F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEditor.Purchasing.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEditor.VR.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEngine.VR.xml
 F:\Development\Unity\Power Finger\Temp\bin\Debug\UnityEditor.iOS.Extensions.Xcode.xml
-F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-Editor.csprojResolveAssemblyReference.cache
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-Editor.dll
 F:\Development\Unity\Power Finger\obj\Debug\Assembly-CSharp-Editor.pdb

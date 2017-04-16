@@ -1,18 +1,23 @@
 ﻿using Assets.Scripts;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class GameFinishManager : CommonManager {
+public class GameFinishManager : CommonManager
+{
 
-	// Use this for initialization
-	void Start () {
-       MessageBox("t");
+    // Use this for initialization
+    void Start()
+    {
+        MessageBox("t");
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
+        {
+            SceneManager.LoadScene("MainMenu");
+            return;
+        }
+    }
 }

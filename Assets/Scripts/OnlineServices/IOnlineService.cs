@@ -14,6 +14,16 @@ namespace Assets.Scripts.OnlineServices
         void SetOnShowWaitingRoomEvent(Action action);
         void SetMessageEvent(Action<string, bool> action);
         void SetOnStartGameEvent(Action action);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="func">Function To Generate List Game Point and return the list</param>
+        void SetGeneratePointFunc(Func<GamePoint[]> func);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action">Action to set the List Game Point</param>
+        void SetGeneratedPointAction(Action<GamePoint[]> action);
 
         void Initialize();
         OnlineStatus GetConnectionStatus();

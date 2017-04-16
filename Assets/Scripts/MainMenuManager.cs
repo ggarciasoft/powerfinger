@@ -61,6 +61,8 @@ public class MainMenuManager : CommonManager
 
     private void Start()
     {
+        Screen.sleepTimeout = 30;
+
         "pnlSettings".Hide();
         "pnlNewGame".Hide();
 

@@ -320,6 +320,7 @@
      <Compile Include="Assets\PlayFabSdk\Shared\SignalR.NET20\Transports\SseEvent.cs" />
      <Compile Include="Assets\Scripts\CommonManager.cs" />
      <Compile Include="Assets\Scripts\GameFinishManager.cs" />
+     <Compile Include="Assets\Scripts\GamePoint.cs" />
      <Compile Include="Assets\Scripts\MainMenuManager.cs" />
      <Compile Include="Assets\Scripts\ManagerButtonsEvent.cs" />
      <Compile Include="Assets\Scripts\OnlineServices\AuthenticationService.cs" />
