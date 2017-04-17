@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using UnityEngine;
 
 namespace Assets.Scripts.OnlineServices
 {
@@ -77,11 +76,12 @@ namespace Assets.Scripts.OnlineServices
 
         public bool SendPointExplode(PointExplodeData data)
         {
-            //byte + byte + short length
-            var arr = new List<byte>(4);
+            //byte + byte + short + float length
+            var arr = new List<byte>(8);
             arr.Add((byte)MessageType.PointExplode);
             arr.Add(data.SumScore);
             arr.AddRange(BitConverter.GetBytes(data.PointId));
+            arr.AddRange(BitConverter.GetBytes(data.TimeExplode));
             RealTime.SendMessageToAll(true, arr.ToArray());
             return true;
         }
@@ -186,24 +186,14 @@ namespace Assets.Scripts.OnlineServices
                     var bf = new BinaryFormatter();
                     using (var stream = new MemoryStream(data, 1, data.Length - 1))
                         SetGeneratedPointAction((GamePoint[])bf.Deserialize(stream));
-                    data = new byte[1];
-                    data[0] = (byte)MessageType.StartGame;
-                    PlayGamesPlatform.Instance.RealTime.SendMessageToAll(true, data);
-                    OnStartGameAction();
                 }
-                else if (data[0] == (byte)MessageType.StartGame)
-                {
-                    OnStartGameAction();
-                }
-                else if (data[0] == (byte)MessageType.PointExplode)
-                {
-                    if (OnPointExplodeAction != null)
-                        OnPointExplodeAction(new PointExplodeData
-                        {
-                            SumScore = data[1],
-                            PointId = BitConverter.ToInt16(data, 2)
-                        });
-                }
+                else if (data[0] == (byte)MessageType.PointExplode && OnPointExplodeAction != null)
+                    OnPointExplodeAction(new PointExplodeData
+                    {
+                        SumScore = data[1],
+                        PointId = BitConverter.ToInt16(data, 2),
+                        TimeExplode = BitConverter.ToSingle(data, 4)
+                    });
             }
 
             private void SendGeneratedPoint()
@@ -233,11 +223,11 @@ namespace Assets.Scripts.OnlineServices
                             SecondPlayerNickName = participants[0].DisplayName,
                             LocalUserIsFirstPlayer = PlayGamesPlatform.Instance.localUser.userName == participants[1].DisplayName
                         });
+                    OnStartGameAction();
                     IsInWaitingRoom = false;
 
                     if (PlayGamesPlatform.Instance.localUser.userName == participants[1].DisplayName)
                         SendGeneratedPoint();
-
                 }
             }
 

@@ -10,7 +10,7 @@ public partial class PlayboardOnlineVersusManager : CommonManager
     #region Properties
     public List<GameObject> lstPrefabPoints;
 
-    private Dictionary<GamePoint.GamePointType, GameObject> _listGamePointsType;
+    private Dictionary<short, GameObject> _listGamePointsType;
     private GamePoint[] _listGamePointsGenerated;
     private GameObject _playboard;
     private Text _txtTimer, _txtScoreP1, _txtScoreP2, _txtNameP1, _txtNameP2, _lblWaitingForPlayer;
@@ -145,7 +145,7 @@ public partial class PlayboardOnlineVersusManager : CommonManager
         foreach (var item in lstPrefabPoints)
         {
             _listGamePointsType.Add(
-                (GamePoint.GamePointType)
+                (short)(GamePoint.GamePointType)
                 System.Enum.Parse(typeof(GamePoint.GamePointType), item.name), item);
         }
 
@@ -173,7 +173,7 @@ public partial class PlayboardOnlineVersusManager : CommonManager
     private GamePoint[] GenerateGamePoints()
     {
         var lst = new List<GamePoint>();
-        var randomPointCount = Random.Range(_timerCount, _timerCount * 3);
+        var randomPointCount = Random.Range((int)_timerCount, ((int)_timerCount) * 3);
 
         for (short i = 0; i < randomPointCount; i++)
         {
@@ -182,8 +182,8 @@ public partial class PlayboardOnlineVersusManager : CommonManager
             lst.Add(new GamePoint
             {
                 Id = i,
-                Type = randomType,
-                Time = Random.Range(1, _timerCount)
+                Type = (short)randomType,
+                Time = Random.Range(1f, _timerCount)
             });
         }
         _listGamePointsGenerated = lst.ToArray();
@@ -218,7 +218,7 @@ public partial class PlayboardOnlineVersusManager : CommonManager
         TxtScoreP2 = GameObject.Find("txtScoreP2").GetComponent<Text>();
         TxtNameP1 = GameObject.Find("txtNameP1").GetComponent<Text>();
         TxtNameP2 = GameObject.Find("txtNameP2").GetComponent<Text>();
-        _listGamePointsType = new Dictionary<GamePoint.GamePointType, GameObject>();
+        _listGamePointsType = new Dictionary<short, GameObject>();
     }
 
     private void ShowWaitingForPlayer()
@@ -263,7 +263,7 @@ public partial class PlayboardOnlineVersusManager : CommonManager
     private void ExplodePoint(GameObject pointToExplode)
     {
         var _temp = Instantiate(
-           _listGamePointsType[GamePoint.GamePointType.PointExplode],
+           _listGamePointsType[(short)GamePoint.GamePointType.PointExplode],
            new Vector3(
                pointToExplode.transform.position.x,
                pointToExplode.transform.position.y,
@@ -298,7 +298,7 @@ public partial class PlayboardOnlineVersusManager : CommonManager
 
                 item.Instatiated = true;
 
-                if (item.Type == GamePoint.GamePointType.NormalPoint)
+                if (item.Type == (short)GamePoint.GamePointType.NormalPoint)
                     particle.simulationSpeed = 0.4f;
 
                 point = Instantiate(point, new Vector3(x, y, z), Quaternion.identity) as GameObject;
@@ -367,19 +367,16 @@ public partial class PlayboardOnlineVersusManager : CommonManager
         }
 
         GameObject objectTouched = null;
-        var isTouched = Input.GetMouseButtonDown(0) || Input.touchCount > 0;
+        var isTouched = Input.touchCount > 0;
 
         if (!isTouched) return;
 
-        if (Input.GetMouseButtonDown(0))
-            OnObjectTouched(objectTouched, Input.mousePosition);
-        else
-            for (int i = 0; i < Input.touchCount; i++)
-            {
-                var touch = Input.GetTouch(i);
-                if (touch.phase != TouchPhase.Began) continue;
-                OnObjectTouched(objectTouched, touch.position);
-            }
+        for (int i = 0; i < Input.touchCount; i++)
+        {
+            var touch = Input.GetTouch(i);
+            if (touch.phase != TouchPhase.Began) continue;
+            OnObjectTouched(objectTouched, touch.position);
+        }
 
         SetSelfScore();
     }
@@ -403,13 +400,26 @@ public partial class PlayboardOnlineVersusManager : CommonManager
         else if (raycast.collider.CompareTag("SpecialPoint"))
             sumScore += 5;
 
-        _currentSelfScore += sumScore;
         var id = short.Parse(objectTouched.name.Split('-')[1]);
+
+        var point = _listGamePointsGenerated.Single(o => o.Id == id);
+
+        if (point.IsExplodeBySelf.HasValue && !point.IsExplodeBySelf.Value)
+            if (point.TimeExplode > _timerCount)
+                return;
+            else if (point.TimeExplode < _timerCount)
+                _currentOtherScore -= sumScore;
+
+        point.IsExplodeBySelf = true;
+        point.TimeExplode = _timerCount;
+
+        _currentSelfScore += sumScore;
 
         OnlineService.SendPointExplode(new PointExplodeData
         {
             PointId = id,
-            SumScore = sumScore
+            SumScore = sumScore,
+            TimeExplode = _timerCount
         });
 
         ExplodePoint(objectTouched);
@@ -417,7 +427,17 @@ public partial class PlayboardOnlineVersusManager : CommonManager
 
     private void PointExplodeFromOponent(PointExplodeData pointExplode)
     {
-        //var point = _listGamePointsGenerated.Single(o => o.Id == pointId);
+        var point = _listGamePointsGenerated.Single(o => o.Id == pointExplode.PointId);
+
+        if (point.IsExplodeBySelf.HasValue && point.IsExplodeBySelf.Value)
+            if (point.TimeExplode < pointExplode.TimeExplode)
+                _currentSelfScore -= pointExplode.SumScore;
+            else if (point.TimeExplode > pointExplode.TimeExplode)
+                return;
+
+        point.IsExplodeBySelf = false;
+        point.TimeExplode = pointExplode.TimeExplode;
+
         var objectTouched = GameObject.Find("Point-" + pointExplode.PointId);
         ExplodePoint(objectTouched);
         _currentOtherScore += pointExplode.SumScore;

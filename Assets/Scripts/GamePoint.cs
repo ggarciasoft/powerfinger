@@ -6,8 +6,10 @@ namespace Assets.Scripts
     public class GamePoint
     {
         public short Id { get; set; }
-        public GamePointType Type { get; set; }
+        public short Type { get; set; }
         public float Time { get; set; }
+        public float TimeExplode { get; set; }
+        public bool? IsExplodeBySelf { get; set; }
         public bool Instatiated { get; set; }
 
         public enum GamePointType

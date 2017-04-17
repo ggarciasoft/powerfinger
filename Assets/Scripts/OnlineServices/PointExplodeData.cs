@@ -9,6 +9,7 @@ namespace Assets.Scripts.OnlineServices
     public class PointExplodeData
     {
         public short PointId { get; set; }
+        public float TimeExplode { get; set; }
         public byte SumScore { get; set; }
     }
 }

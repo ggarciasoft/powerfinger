@@ -16,6 +16,7 @@ public class GameFinishManager : CommonManager
     {
         if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
         {
+            BackFromGame = true;
             SceneManager.LoadScene("MainMenu");
             return;
         }
