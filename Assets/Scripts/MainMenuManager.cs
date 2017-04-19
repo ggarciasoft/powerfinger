@@ -9,9 +9,7 @@ using Assets.Scripts.OnlineServices;
 public class MainMenuManager : CommonManager
 {
     #region Properties
-    public GameObject[] lstAvailablePoints, btnPrincipalGameButton;
-    private List<GameObject> _lstInstatiatePoints;
-    private float _camHalfHeight, _camHalfWidth;
+    public GameObject[] btnPrincipalGameButton;
     private Text _txtBlockImageText, _txtServerStatus;
     private InputField _txtNickname;
     private Text txtBlockImageText
@@ -61,15 +59,11 @@ public class MainMenuManager : CommonManager
 
     private void Start()
     {
+        base.Init();
         Screen.sleepTimeout = 30;
 
         "pnlSettings".Hide();
         "pnlNewGame".Hide();
-
-        _camHalfHeight = Camera.main.orthographicSize;
-        _camHalfWidth = Camera.main.aspect * _camHalfHeight;
-
-        _lstInstatiatePoints = new List<GameObject>();
 
         System.Action<bool> init = (val) =>
         {
@@ -122,23 +116,6 @@ public class MainMenuManager : CommonManager
             txtBlockImageText.color = new Color(0, 0, 0, txtBlockImageText.color.a - 0.01f);
 
         BlockImage.color = new Color(255, 255, 255, BlockImage.color.a - 0.01f);
-    }
-
-    private void GeneratePoint()
-    {
-        if (_lstInstatiatePoints.Count >= 6)
-        {
-            var obj = _lstInstatiatePoints.First();
-            DestroyImmediate(obj);
-            _lstInstatiatePoints.Remove(obj);
-        }
-
-        var randomPoint = Random.Range(0, lstAvailablePoints.Length);
-        float x = Random.Range(-_camHalfWidth, _camHalfWidth), y = Random.Range(-_camHalfHeight, _camHalfHeight), z = 0;
-        var point = lstAvailablePoints[randomPoint];
-        point.ParticleColorOverLifetime(true);
-        point = Instantiate(point, new Vector3(x, y, z), Quaternion.identity) as GameObject;
-        _lstInstatiatePoints.Add(point);
     }
 
     private void InitializeServer()

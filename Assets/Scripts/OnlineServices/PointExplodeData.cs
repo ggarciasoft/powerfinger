@@ -10,6 +10,6 @@ namespace Assets.Scripts.OnlineServices
     {
         public short PointId { get; set; }
         public float TimeExplode { get; set; }
-        public byte SumScore { get; set; }
+        public byte ValuePoint { get; set; }
     }
 }

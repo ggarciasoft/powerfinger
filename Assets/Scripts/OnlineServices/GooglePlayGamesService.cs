@@ -28,9 +28,8 @@ namespace Assets.Scripts.OnlineServices
             get
             {
                 if (_instance == null)
-                {
                     _instance = new GooglePlayGamesService();
-                }
+
                 return _instance;
             }
         }
@@ -79,7 +78,7 @@ namespace Assets.Scripts.OnlineServices
             //byte + byte + short + float length
             var arr = new List<byte>(8);
             arr.Add((byte)MessageType.PointExplode);
-            arr.Add(data.SumScore);
+            arr.Add(data.ValuePoint);
             arr.AddRange(BitConverter.GetBytes(data.PointId));
             arr.AddRange(BitConverter.GetBytes(data.TimeExplode));
             RealTime.SendMessageToAll(true, arr.ToArray());
@@ -190,7 +189,7 @@ namespace Assets.Scripts.OnlineServices
                 else if (data[0] == (byte)MessageType.PointExplode && OnPointExplodeAction != null)
                     OnPointExplodeAction(new PointExplodeData
                     {
-                        SumScore = data[1],
+                        ValuePoint = data[1],
                         PointId = BitConverter.ToInt16(data, 2),
                         TimeExplode = BitConverter.ToSingle(data, 4)
                     });

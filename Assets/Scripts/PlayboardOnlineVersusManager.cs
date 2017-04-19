@@ -16,7 +16,6 @@ public partial class PlayboardOnlineVersusManager : CommonManager
     private Text _txtTimer, _txtScoreP1, _txtScoreP2, _txtNameP1, _txtNameP2, _lblWaitingForPlayer;
     private float _timerCount = 30f;
     private bool _gameInitiate, _tryLeavingRoom, _waitingStart;
-    private short _currentSelfScore, _currentOtherScore;
 
     private bool _isFirstPlayer;
 
@@ -173,7 +172,7 @@ public partial class PlayboardOnlineVersusManager : CommonManager
     private GamePoint[] GenerateGamePoints()
     {
         var lst = new List<GamePoint>();
-        var randomPointCount = Random.Range((int)_timerCount, ((int)_timerCount) * 3);
+        var randomPointCount = Random.Range((int)_timerCount * 2, ((int)_timerCount) * 3);
 
         for (short i = 0; i < randomPointCount; i++)
         {
@@ -315,13 +314,24 @@ public partial class PlayboardOnlineVersusManager : CommonManager
     {
         CancelInvoke("UpdateGame");
         _gameInitiate = false;
-        MessageBox("GAME FINISH!!!", onClose: () => SceneManager.LoadScene("GameFinish"));
+        MessageBox("GAME FINISH!!!", onClose: () =>
+        {
+            ActionWhenBlockImageToggle = () =>
+            {
+                GameFinishManager.Data.ListGamePoints = _listGamePointsGenerated;
+                SceneManager.LoadScene("GameFinish");
+            };
+
+            InvokeRepeating("ShowBlockImage", 0, 0.01f);
+        });
     }
 
     private void SelfLeaveRoom()
     {
         OnlineService.LeaveRoom();
         BackFromGame = true;
+        GameFinishManager.Data.ListGamePoints = _listGamePointsGenerated;
+        GameFinishManager.Data.IsWinner = false;
         SceneManager.LoadScene("GameFinish");
     }
 
@@ -329,7 +339,12 @@ public partial class PlayboardOnlineVersusManager : CommonManager
     {
         CancelInvoke("UpdateGame");
         _gameInitiate = false;
-        MessageBox("Your oponent leave the room, you win!", onClose: () => SceneManager.LoadScene("GameFinish"));
+        MessageBox("Your oponent leave the room, you win!", onClose: () =>
+        {
+            GameFinishManager.Data.ListGamePoints = _listGamePointsGenerated;
+            GameFinishManager.Data.IsWinner = true;
+            SceneManager.LoadScene("GameFinish");
+        });
     }
 
     private void OponentDeclinedInvitation()
@@ -393,12 +408,6 @@ public partial class PlayboardOnlineVersusManager : CommonManager
 
         objectTouched = raycast.collider.gameObject;
 
-        var sumScore = byte.MinValue;
-
-        if (raycast.collider.CompareTag("NormalPoint"))
-            sumScore++;
-        else if (raycast.collider.CompareTag("SpecialPoint"))
-            sumScore += 5;
 
         var id = short.Parse(objectTouched.name.Split('-')[1]);
 
@@ -407,18 +416,17 @@ public partial class PlayboardOnlineVersusManager : CommonManager
         if (point.IsExplodeBySelf.HasValue && !point.IsExplodeBySelf.Value)
             if (point.TimeExplode > _timerCount)
                 return;
-            else if (point.TimeExplode < _timerCount)
-                _currentOtherScore -= sumScore;
 
         point.IsExplodeBySelf = true;
         point.TimeExplode = _timerCount;
+        point.RealValuePoint = point.ValuePoint;
 
-        _currentSelfScore += sumScore;
+        var sumScore = point.RealValuePoint;
 
         OnlineService.SendPointExplode(new PointExplodeData
         {
             PointId = id,
-            SumScore = sumScore,
+            ValuePoint = sumScore,
             TimeExplode = _timerCount
         });
 
@@ -429,18 +437,15 @@ public partial class PlayboardOnlineVersusManager : CommonManager
     {
         var point = _listGamePointsGenerated.Single(o => o.Id == pointExplode.PointId);
 
-        if (point.IsExplodeBySelf.HasValue && point.IsExplodeBySelf.Value)
-            if (point.TimeExplode < pointExplode.TimeExplode)
-                _currentSelfScore -= pointExplode.SumScore;
-            else if (point.TimeExplode > pointExplode.TimeExplode)
-                return;
+        if (point.IsExplodeBySelf.HasValue && point.IsExplodeBySelf.Value && point.TimeExplode > pointExplode.TimeExplode)
+            return;
 
         point.IsExplodeBySelf = false;
         point.TimeExplode = pointExplode.TimeExplode;
+        point.RealValuePoint = pointExplode.ValuePoint;
 
         var objectTouched = GameObject.Find("Point-" + pointExplode.PointId);
         ExplodePoint(objectTouched);
-        _currentOtherScore += pointExplode.SumScore;
         SetOtherScore();
     }
 
@@ -457,18 +462,26 @@ public partial class PlayboardOnlineVersusManager : CommonManager
 
     private void SetSelfScore()
     {
+        var score = _listGamePointsGenerated
+            .Where(o => o.IsExplodeBySelf.HasValue && o.IsExplodeBySelf.Value)
+            .Sum(o => o.RealValuePoint).ToString();
+
         if (_isFirstPlayer)
-            TxtScoreP1.text = _currentSelfScore.ToString();
+            TxtScoreP1.text = score;
         else
-            TxtScoreP2.text = _currentSelfScore.ToString();
+            TxtScoreP2.text = score;
     }
 
     private void SetOtherScore()
     {
+        var score = _listGamePointsGenerated
+            .Where(o => o.IsExplodeBySelf.HasValue && !o.IsExplodeBySelf.Value)
+            .Sum(o => o.RealValuePoint).ToString();
+
         if (_isFirstPlayer)
-            TxtScoreP2.text = _currentOtherScore.ToString();
+            TxtScoreP2.text = score;
         else
-            TxtScoreP1.text = _currentOtherScore.ToString();
+            TxtScoreP1.text = score;
     }
 
     private void OnApplicationFocus(bool hasFocus)

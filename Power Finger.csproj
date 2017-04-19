@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>Android:13</UnityBuildTarget>
     <UnityVersion>5.6.0f3</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -357,6 +359,7 @@
     <Compile Include="Assets\PlayFabSdk\Shared\SignalR.NET20\Transports\ServerSentEventsTransport.cs" />
     <Compile Include="Assets\PlayFabSdk\Shared\SignalR.NET20\Transports\SseEvent.cs" />
     <Compile Include="Assets\Scripts\CommonManager.cs" />
+    <Compile Include="Assets\Scripts\GameFinishData.cs" />
     <Compile Include="Assets\Scripts\GameFinishManager.cs" />
     <Compile Include="Assets\Scripts\GamePoint.cs" />
     <Compile Include="Assets\Scripts\MainMenuManager.cs" />

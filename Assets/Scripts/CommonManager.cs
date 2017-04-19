@@ -63,6 +63,13 @@ namespace Assets.Scripts
         #endregion
 
         #region Methods
+        public void Init()
+        {
+            _camHalfHeight = Camera.main.orthographicSize;
+            _camHalfWidth = Camera.main.aspect * _camHalfHeight;
+            ListBackgroundInstatiatePoints = new List<GameObject>();
+        }
+
         protected void BlockImageSetActive(bool active)
         {
             GameObject.Find("Canvas").transform.Find("BlockImage").gameObject.SetActive(active);
@@ -135,7 +142,7 @@ namespace Assets.Scripts
             }
 
             var scale = Convert.ToDecimal(pnlMessageBox.transform.localScale.x);
-            
+
             if (scale == _limitScale)
             {
                 if (_limitScale == 1.2m)
@@ -164,6 +171,35 @@ namespace Assets.Scripts
         public void ClickMessageBoxClose(GameObject pnlMessageBox)
         {
             DestroyImmediate(pnlMessageBox);
+        }
+        #endregion
+
+        #region Generate Background Points
+        protected List<GameObject> ListBackgroundInstatiatePoints { get; set; }
+        protected float _camHalfHeight, _camHalfWidth;
+        public GameObject[] lstBackgroundAvailablePoints;
+
+        protected void GeneratePoint()
+        {
+            if (ListBackgroundInstatiatePoints.Count >= 6)
+            {
+                var obj = ListBackgroundInstatiatePoints.First();
+                DestroyImmediate(obj);
+                ListBackgroundInstatiatePoints.Remove(obj);
+            }
+
+            var randomPoint = UnityEngine.Random.Range(0, lstBackgroundAvailablePoints.Length);
+            float x = UnityEngine.Random.Range(-_camHalfWidth, _camHalfWidth), y = UnityEngine.Random.Range(-_camHalfHeight, _camHalfHeight), z = 0;
+            try
+            {
+                var point = lstBackgroundAvailablePoints[randomPoint];
+                point.ParticleColorOverLifetime(true);
+                point = Instantiate(point, new Vector3(x, y, z), Quaternion.identity) as GameObject;
+                ListBackgroundInstatiatePoints.Add(point);
+            }
+            catch (Exception ex)
+            {
+            }
         }
         #endregion
     }
