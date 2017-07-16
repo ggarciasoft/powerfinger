@@ -29,46 +29,51 @@ public class GameFinishManager : CommonManager
 
         InvokeRepeating("HideBlockImage", 0, 0.01f);
         InvokeRepeating("GeneratePoint", 0f, 1f);
+        GameObject.Find("lblNameP1").GetComponent<Text>().text = Data.NameP1;
+        GameObject.Find("lblNameP2").GetComponent<Text>().text = Data.NameP2;
 
         var lblTitle = GameObject.Find("lblTitle").GetComponent<Text>();
 
-            var selfResult = (short)Data
+        var p1IsSelf = OnlineService.GetUsername() == Data.NameP1;
+
+        var resultP1 = (short)Data
+        .ListGamePoints
+        .Where(o => o.IsExplodeBySelf.HasValue && o.IsExplodeBySelf.Value == p1IsSelf)
+        .Sum(o => o.RealValuePoint);
+
+        var resultP2 = (short)Data
             .ListGamePoints
-            .Where(o => o.IsExplodeBySelf.HasValue && o.IsExplodeBySelf.Value)
-            .Sum(o => o.RealValuePoint);
-        var otherResult = (short)Data
-            .ListGamePoints
-            .Where(o => o.IsExplodeBySelf.HasValue && !o.IsExplodeBySelf.Value)
+            .Where(o => o.IsExplodeBySelf.HasValue && o.IsExplodeBySelf.Value != p1IsSelf)
             .Sum(o => o.RealValuePoint);
 
         GameObject.Find("lblPointP1").GetComponent<Text>().text = Data
             .ListGamePoints
-            .Where(o => o.IsExplodeBySelf.HasValue && o.IsExplodeBySelf.Value && o.Type == (short)GamePoint.GamePointType.NormalPoint)
+            .Where(o => o.IsExplodeBySelf.HasValue && o.IsExplodeBySelf.Value == p1IsSelf && o.Type == (short)GamePoint.GamePointType.NormalPoint)
             .Count().ToString();
         GameObject.Find("lblPointP2").GetComponent<Text>().text = Data
             .ListGamePoints
-            .Where(o => o.IsExplodeBySelf.HasValue && !o.IsExplodeBySelf.Value && o.Type == (short)GamePoint.GamePointType.NormalPoint)
+            .Where(o => o.IsExplodeBySelf.HasValue && o.IsExplodeBySelf.Value != p1IsSelf && o.Type == (short)GamePoint.GamePointType.NormalPoint)
             .Count().ToString();
         GameObject.Find("lblSPointP1").GetComponent<Text>().text = Data
             .ListGamePoints
-            .Where(o => o.IsExplodeBySelf.HasValue && o.IsExplodeBySelf.Value && o.Type == (short)GamePoint.GamePointType.SpecialPoint)
+            .Where(o => o.IsExplodeBySelf.HasValue && o.IsExplodeBySelf.Value == p1IsSelf && o.Type == (short)GamePoint.GamePointType.SpecialPoint)
             .Count().ToString();
         GameObject.Find("lblSPointP2").GetComponent<Text>().text = Data
             .ListGamePoints
-            .Where(o => o.IsExplodeBySelf.HasValue && !o.IsExplodeBySelf.Value && o.Type == (short)GamePoint.GamePointType.SpecialPoint)
+            .Where(o => o.IsExplodeBySelf.HasValue && o.IsExplodeBySelf.Value != p1IsSelf && o.Type == (short)GamePoint.GamePointType.SpecialPoint)
             .Count().ToString();
 
-        GameObject.Find("lblResultP1").GetComponent<Text>().text = selfResult.ToString();
-        GameObject.Find("lblResultP2").GetComponent<Text>().text = otherResult.ToString();
+        GameObject.Find("lblResultP1").GetComponent<Text>().text = resultP1.ToString();
+        GameObject.Find("lblResultP2").GetComponent<Text>().text = resultP2.ToString();
 
         if (!Data.IsWinner.HasValue)
         {
-            if (selfResult== otherResult)
+            if (resultP1 == resultP2)
             {
                 lblTitle.text = "DRAW!!";
             }
             else
-                Data.IsWinner = selfResult> otherResult;
+                Data.IsWinner = resultP1 > resultP2;
         }
 
         lblTitle.text = Data.IsWinner.GetValueOrDefault() ? "WINNER!!" : "LOSER!!";

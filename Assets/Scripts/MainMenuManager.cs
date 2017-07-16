@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.UI;
 using Assets.Scripts;
 using Assets.Scripts.OnlineServices;
+using PlayFab;
 
 public class MainMenuManager : CommonManager
 {
@@ -63,7 +64,7 @@ public class MainMenuManager : CommonManager
         Screen.sleepTimeout = 30;
 
         "pnlSettings".Hide();
-        "pnlNewGame".Hide();
+        "pnlShop".Hide();
 
         System.Action<bool> init = (val) =>
         {
@@ -78,6 +79,7 @@ public class MainMenuManager : CommonManager
                     InvokeRepeating("ShowTextBlockImage", 0, 0.01f);
                 InitializeServer();
                 UpdateServerService = true;
+                SetCurrency();
             }
             else
                 MessageBox("Login failed", onClose: () => Application.Quit());
@@ -87,6 +89,20 @@ public class MainMenuManager : CommonManager
             init(true);
         else
             MainOnlineService.AuthService.SignIn(init);
+    }
+
+    private void SetCurrency()
+    {
+        PlayFabClientAPI.GetUserInventory(new PlayFab.ClientModels.GetUserInventoryRequest(),
+            (result) =>
+            {
+                GameObject.Find("lblOrbs").GetComponent<Text>().text = "x "+result.VirtualCurrency["OR"].ToString();
+            },
+            (error) =>
+            {
+                MessageBox("Error getting currency - " + error.HttpCode);
+                Debug.LogError(error.ErrorMessage);
+            });
     }
 
     private void ShowTextBlockImage()

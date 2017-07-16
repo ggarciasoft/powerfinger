@@ -1,6 +1,5 @@
 ﻿using GooglePlayGames;
 using GooglePlayGames.BasicApi.Multiplayer;
-using PlayFab;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -138,6 +137,11 @@ namespace Assets.Scripts.OnlineServices
         public void SetGeneratedPointAction(Action<GamePoint[]> action)
         {
             _listenerInstance.SetGeneratedPointAction = action;
+        }
+
+        public string GetUsername()
+        {
+            return PlayGamesPlatform.Instance.localUser.userName;
         }
 
         private class RealTimeMultiplayerListenerImplementation : RealTimeMultiplayerListener

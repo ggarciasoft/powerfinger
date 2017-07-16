@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 using Assets.Scripts;
 using Assets.Scripts.OnlineServices;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -32,22 +33,38 @@ public class ManagerButtonsEvent : CommonManager
 
     #region Main Menu Buttons
 
-    public void ClickNewGame()
+    public void ClickNewGameAutomatch()
     {
-        "pnlMainMenu".Hide();
-        "pnlNewGame".Show();
         IsJoining = false;
         OnlineService.SetOnShowWaitingRoomEvent(null);
         OnlineService.SetMessageEvent(OnlineServiceMessage);
+        var join = OnlineService.CreateRoom();
+        if (!join) return;
+        ShowWaitingRoom();
     }
 
-    public void ClickJoinGame()
+    public void ClickNewGameInvitation()
+    {
+        IsJoining = false;
+        OnlineService.SetOnShowWaitingRoomEvent(null);
+        OnlineService.SetMessageEvent(OnlineServiceMessage);
+        var join = OnlineService.CreateRoom();
+        if (!join) return;
+        ShowWaitingRoom();
+    }
+
+    public void ClickViewInvitation()
     {
         UpdateServerService = false;
         IsJoining = true;
         OnlineService.SetOnShowWaitingRoomEvent(null);
         OnlineService.SetMessageEvent(OnlineServiceMessage);
-        ShowWaitingRoom();
+        SetEnableFadeWhiteButtons(false);
+        var join = OnlineService.InviteRoom();
+
+        if (!join) return;
+        OnlineService.SetOnShowWaitingRoomEvent(ShowWaitingRoom);
+        Invoke("SetEnableFadeWhiteButtons", 1f);
     }
 
     private void ShowWaitingRoom()
@@ -82,6 +99,49 @@ public class ManagerButtonsEvent : CommonManager
     {
         Social.ShowLeaderboardUI();
     }
+
+    public void ClickShop()
+    {
+        PlayFab.PlayFabClientAPI.GetCatalogItems(new PlayFab.ClientModels.GetCatalogItemsRequest(),
+            (result) =>
+            {
+                PlayFab.PlayFabClientAPI.GetUserInventory( new PlayFab.ClientModels.GetUserInventoryRequest(),
+            (result2) =>
+            {
+                foreach (var item in result.Catalog)
+                {
+                    var quantity = result2.Inventory.Where(o => o.ItemId == item.ItemId).Sum(o => o.RemainingUses);
+
+                    var pnlItem = Instantiate(
+                    Resources.LoadAll("pnlItem")[0],
+                    GameObject.Find("ScrollViewItems").transform, false) as GameObject;
+                    pnlItem.transform.Find("lblItemLetter").GetComponent<Text>().text = item.ItemId;
+                    pnlItem.transform.Find("lblDescription").GetComponent<Text>().text = item.Description;
+                    pnlItem.transform.Find("lblItemPrice").GetComponent<Text>().text = item.VirtualCurrencyPrices["OR"].ToString();
+                    pnlItem.transform.Find("lblQuantity").GetComponent<Text>().text = quantity.GetValueOrDefault().ToString();
+                }
+                var rect = GameObject.Find("pnlItems").GetComponent<RectTransform>();
+                rect.sizeDelta = new Vector2(rect.sizeDelta.x, (result.Catalog.Count * 100) + 100);
+
+                "pnlMainMenu".Hide();
+                "pnlShop".Show();
+            },
+            (error) =>
+            {
+                MessageBox("Error getting shop information");
+            });
+            },
+            (error) =>
+            {
+                MessageBox("Error getting shop information");
+            });
+    }
+
+    public void ClickBackShop()
+    {
+        "pnlMainMenu".Show();
+        "pnlShop".Hide();
+    }
     #endregion
 
     #region Settings
@@ -100,39 +160,6 @@ public class ManagerButtonsEvent : CommonManager
         "pnlSettings".Hide();
         "pnlMainMenu".Show();
     }
-    #endregion
-
-    #region New Game
-
-    public void ClickMainMenuBackNewGame()
-    {
-        "pnlNewGame".Hide();
-        "pnlMainMenu".Show();
-    }
-
-    public void sldTimeChanged(float value)
-    {
-        GameObject.Find("txtTime").GetComponent<Text>().text = value.ToString();
-    }
-
-    public void ClickInvite()
-    {
-        SetEnableFadeWhiteButtons(false);
-        var join = OnlineService.InviteRoom();
-
-        if (!join) return;
-        OnlineService.SetOnShowWaitingRoomEvent(ShowWaitingRoom);
-        Invoke("SetEnableFadeWhiteButtons", 1f);
-    }
-
-    public void ClickAutomatch()
-    {
-        var join = OnlineService.CreateRoom();
-
-        if (!join) return;
-        ShowWaitingRoom();
-    }
-
     #endregion
 
     public void ClickReviewConfiguration()

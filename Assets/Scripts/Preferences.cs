@@ -53,5 +53,17 @@ namespace Assets.Scripts
                 PlayerPrefs.SetFloat("SoundVolume", value);
             }
         }
+
+        public static string PlayFabId
+        {
+            get
+            {
+                return PlayerPrefs.GetString("PlayFabId");
+            }
+            set
+            {
+                PlayerPrefs.SetString("PlayFabId", value);
+            }
+        }
     }
 }

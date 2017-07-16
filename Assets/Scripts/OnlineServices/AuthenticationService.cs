@@ -78,6 +78,8 @@ namespace Assets.Scripts.OnlineServices
                             CreateAccount = true
                         }, (successLoginResult) =>
                         {
+                            successLoginResult.InfoResultPayload.
+                            Preferences.PlayFabId = successLoginResult.PlayFabId;
                             Debug.LogFormat("Login With Google Success: ", successLoginResult.PlayFabId);
                             callBack(true);
                         }, (errorResult) =>

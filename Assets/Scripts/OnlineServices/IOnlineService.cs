@@ -34,5 +34,6 @@ namespace Assets.Scripts.OnlineServices
         bool SendPointExplode(PointExplodeData data);
         bool Sync();
         bool IsRoomConected();
+        string GetUsername();
     }
 }

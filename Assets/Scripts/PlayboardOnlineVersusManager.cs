@@ -318,11 +318,11 @@ public partial class PlayboardOnlineVersusManager : CommonManager
         {
             ActionWhenBlockImageToggle = () =>
             {
-                GameFinishManager.Data.ListGamePoints = _listGamePointsGenerated;
+                AsignGameFinishData(null);
                 SceneManager.LoadScene("GameFinish");
             };
 
-            InvokeRepeating("ShowBlockImage", 0, 0.01f);
+            InvokeRepeating("HideBlockImage", 0, 0.01f);
         });
     }
 
@@ -330,9 +330,16 @@ public partial class PlayboardOnlineVersusManager : CommonManager
     {
         OnlineService.LeaveRoom();
         BackFromGame = true;
-        GameFinishManager.Data.ListGamePoints = _listGamePointsGenerated;
-        GameFinishManager.Data.IsWinner = false;
+        AsignGameFinishData(false);
         SceneManager.LoadScene("GameFinish");
+    }
+
+    private void AsignGameFinishData(bool? isWinner)
+    {
+        GameFinishManager.Data.ListGamePoints = _listGamePointsGenerated;
+        GameFinishManager.Data.NameP1 = TxtNameP1.text;
+        GameFinishManager.Data.NameP2 = TxtNameP2.text;
+        GameFinishManager.Data.IsWinner = isWinner;
     }
 
     private void OponentLeaveRoom()
@@ -341,8 +348,7 @@ public partial class PlayboardOnlineVersusManager : CommonManager
         _gameInitiate = false;
         MessageBox("Your oponent leave the room, you win!", onClose: () =>
         {
-            GameFinishManager.Data.ListGamePoints = _listGamePointsGenerated;
-            GameFinishManager.Data.IsWinner = true;
+            AsignGameFinishData(true);
             SceneManager.LoadScene("GameFinish");
         });
     }
